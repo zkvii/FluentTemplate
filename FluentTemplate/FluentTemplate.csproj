@@ -13,6 +13,7 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <WindowsPackageType>None</WindowsPackageType>
+    <StartupObject>FluentTemplate.Program.Main</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
