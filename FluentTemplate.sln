@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentTemplate", "FluentTemplate\FluentTemplate.csproj", "{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{DF9170C6-4A12-47B6-8681-D049BE5CD1F7}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Debug|ARM64.Build.0 = Debug|ARM64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Debug|x64.ActiveCfg = Debug|x64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Debug|x64.Build.0 = Debug|x64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Debug|x64.Deploy.0 = Debug|x64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Debug|x86.ActiveCfg = Debug|x86
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Debug|x86.Build.0 = Debug|x86
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Debug|x86.Deploy.0 = Debug|x86
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Release|ARM64.ActiveCfg = Release|ARM64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Release|ARM64.Build.0 = Release|ARM64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Release|ARM64.Deploy.0 = Release|ARM64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Release|x64.ActiveCfg = Release|x64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Release|x64.Build.0 = Release|x64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Release|x64.Deploy.0 = Release|x64
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Release|x86.ActiveCfg = Release|x86
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Release|x86.Build.0 = Release|x86
+		{FC9B6A41-D67E-4FC7-8122-BBCFFC555F7E}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A16F1AD1-FC7A-4DDF-812B-2EDDD8201635}
+	EndGlobalSection
+EndGlobal

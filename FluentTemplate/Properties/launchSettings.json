@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FluentTemplate (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "FluentTemplate (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
