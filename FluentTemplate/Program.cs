@@ -1,28 +1,27 @@
-﻿
-using Microsoft.UI.Dispatching;
+﻿using Microsoft.UI.Dispatching;
 using Microsoft.Windows.AppLifecycle;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.Storage;
+using Microsoft.UI.Xaml;
 
 namespace FluentTemplate;
 
-class Program
+public static class Program
 {
-
     private static int activationCount = 1;
     public static List<string> OutputStack { get; private set; }
+
 
     // Replaces the standard App.g.i.cs.
     // Note: We can't declare Main to be async because in a WinUI app
     // this prevents Narrator from reading XAML elements.
     [STAThread]
-    public static void Main(string[] args)
+    static void Main(string[] args)
     {
         WinRT.ComWrappersSupport.InitializeComWrappers();
 
@@ -31,7 +30,7 @@ class Program
         bool isRedirect = DecideRedirection();
         if (!isRedirect)
         {
-            Microsoft.UI.Xaml.Application.Start((p) =>
+            Application.Start((p) =>
             {
                 var context = new DispatcherQueueSynchronizationContext(
                     DispatcherQueue.GetForCurrentThread());
@@ -39,6 +38,8 @@ class Program
                 new App();
             });
         }
+
+        
     }
 
     #region Report helpers
@@ -47,10 +48,10 @@ class Program
     {
         // If we already have a form, display the message now.
         // Otherwise, add it to the collection for displaying later.
-        if (App.Current is App thisApp && thisApp.AppWindow != null
-            && thisApp.AppWindow is MainWindow mainWindow)
+        if (Application.Current is App thisApp && thisApp.AppWindow != null
+                                       && thisApp.AppWindow is MainWindow mainWindow)
         {
-            // mainWindow.OutputMessage(message);
+            mainWindow.OutputMessage(message);
         }
         else
         {
@@ -99,6 +100,7 @@ class Program
         {
             ReportFileArgs($"OnActivated ({activationCount++})", args);
         }
+
     }
 
     public static void GetActivationInfo()
@@ -212,6 +214,5 @@ class Program
     }
 
     #endregion
-
 }
 

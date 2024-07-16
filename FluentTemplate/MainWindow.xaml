@@ -6,9 +6,27 @@
     xmlns:local="using:FluentTemplate"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:FluentTemplate.Views"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
+    <StackPanel>
+        <CommandBar 
+            Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" HorizontalAlignment="Left">
+            <AppBarButton 
+                x:Name="ActivationInfoButton" Icon="Comment" Label="ActivationInfo" 
+                Click="ActivationInfoButton_Click"/>
+        </CommandBar>
+
+        <ListView 
+            x:Name="StatusListView" Background="Transparent"
+            ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Height" Value="24" />
+                    <Setter Property="MinHeight" Value="24" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+        <views:TrayIconView></views:TrayIconView>
     </StackPanel>
 </Window>

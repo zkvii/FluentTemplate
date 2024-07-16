@@ -15,6 +15,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using FluentTemplate.Helpers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,11 +27,11 @@ namespace FluentTemplate
     /// </summary>
     public partial class App : Application
     {
-        private Window m_window;
+        private Window _mWindow;
         public Window AppWindow
         {
-            get { return m_window; }
-            private set { }
+            get => _mWindow;
+            private set => _mWindow = value;
         }
 
         public App()
@@ -48,7 +49,7 @@ namespace FluentTemplate
         {
             // NOTE: OnLaunched will always report that the ActivationKind == Launch,
             // even when it isn't.
-            Windows.ApplicationModel.Activation.ActivationKind kind
+            ActivationKind kind
                 = args.UWPLaunchActivatedEventArgs.Kind;
             Program.ReportInfo($"OnLaunched: Kind={kind}");
 
@@ -72,8 +73,8 @@ namespace FluentTemplate
             }
 
             // Go ahead and do standard window initialization regardless.
-            m_window = new MainWindow();
-            m_window.Activate();
+            _mWindow = WindowHelpers.CreateMainWindow();
+            _mWindow.Activate();
         }
     }
 }
