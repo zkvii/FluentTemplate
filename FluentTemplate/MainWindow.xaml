@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <Window
     x:Class="FluentTemplate.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -7,26 +8,84 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:FluentTemplate.Views"
+
     mc:Ignorable="d">
 
-    <StackPanel>
-        <CommandBar 
-            Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" HorizontalAlignment="Left">
-            <AppBarButton 
-                x:Name="ActivationInfoButton" Icon="Comment" Label="ActivationInfo" 
-                Click="ActivationInfoButton_Click"/>
-        </CommandBar>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-        <ListView 
-            x:Name="StatusListView" Background="Transparent"
-            ScrollViewer.VerticalScrollBarVisibility="Visible">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Height" Value="24" />
-                    <Setter Property="MinHeight" Value="24" />
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
-        <views:TrayIconView></views:TrayIconView>
-    </StackPanel>
+        <Grid x:Name="AppTitleBar"
+              Height="48">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
+                <ColumnDefinition x:Name="IconColumn" Width="Auto" />
+                <ColumnDefinition x:Name="TitleColumn" Width="Auto" />
+                <ColumnDefinition x:Name="LeftDragColumn" Width="*" />
+                <ColumnDefinition x:Name="SearchColumn" Width="4*" MinWidth="220" />
+                <ColumnDefinition x:Name="RightDragColumn" Width="*" MinWidth="48" />
+                <ColumnDefinition x:Name="AccountColumn" Width="Auto" />
+                <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
+            </Grid.ColumnDefinitions>
+            <Image x:Name="TitleBarIcon"
+                   Source="ms-appx:///Assets/Science.png"
+                   Grid.Column="1"
+                   Width="16" Height="16"
+                   Margin="8,0,4,0" />
+            <TextBlock x:Name="TitleBarTextBlock"
+                       Text="App title"
+                       Style="{StaticResource CaptionTextBlockStyle}"
+                       Grid.Column="2"
+                       VerticalAlignment="Center">
+            </TextBlock>
+            <AutoSuggestBox x:Name="TitleBarSearchBox"
+                            Grid.Column="4"
+                            QueryIcon="Find"
+                            PlaceholderText="Search"
+                            VerticalAlignment="Center"
+                            MaxWidth="600" />
+            <PersonPicture x:Name="PersonPic"
+                           Grid.Column="6"
+                           Height="32" Margin="0,0,16,0" />
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Width="200" Background="Aqua">
+
+            </Grid>
+            <Grid Grid.Column="1">
+                <views:FluentTableView />
+                <views:TrayIconView></views:TrayIconView>
+            </Grid>
+
+        </Grid>
+        <!-- <NavigationView Grid.Row="1" -->
+        <!--                 IsBackButtonVisible="Collapsed" -->
+        <!--                 IsSettingsVisible="False"> -->
+        <!--     <StackPanel> -->
+        <!--         <TextBlock Text="Content" -->
+        <!--                    Style="{ThemeResource TitleTextBlockStyle}" -->
+        <!--                    Margin="32,0,0,0" /> -->
+        <!--         <StackPanel Grid.Row="1" VerticalAlignment="Center"> -->
+        <!--             <Button Margin="4" x:Name="CompactoverlaytBtn" -->
+        <!--                     Content="Enter CompactOverlay" -->
+        <!--                     Click="SwitchPresenter" /> -->
+        <!--             <Button Margin="4" x:Name="FullscreenBtn" -->
+        <!--                     Content="Enter FullScreen" -->
+        <!--                     Click="SwitchPresenter" /> -->
+        <!--             <Button Margin="4" x:Name="OverlappedBtn" -->
+        <!--                     Content="Revert to default (Overlapped)" -->
+        <!--                     Click="SwitchPresenter" /> -->
+        <!--         </StackPanel> -->
+        <!--       -->
+        <!--     </StackPanel> -->
+        <!-- </NavigationView> -->
+    </Grid>
+
+
 </Window>
