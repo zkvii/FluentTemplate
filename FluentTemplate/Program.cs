@@ -47,11 +47,11 @@ public static class Program
             uiThread.Start();
 
 
-            var bgThread = new Thread(() =>
-            {
-                UiThreadInitialized.WaitOne();
-                AnimateTrayIcon.StartAnimateIcon();
-            });
+            // var bgThread = new Thread(() =>
+            // {
+            //     UiThreadInitialized.WaitOne();
+            //     AnimateTrayIcon.StartAnimateIcon();
+            // });
             // bgThread.Start();
 
 

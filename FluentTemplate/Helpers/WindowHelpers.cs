@@ -31,7 +31,6 @@ public  class WindowHelpers
         HwndList.Add(MHwnd);
         WindowList.Add(window);
 
-        Program.UiThreadInitialized.Set();
 
         return window;
     }

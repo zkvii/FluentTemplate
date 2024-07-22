@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using FluentTemplate.Helpers;
 using System.Windows.Forms;
+using FluentTemplate.Views;
 using static FluentTemplate.Helpers.Win32Helpers;
 
 namespace FluentTemplate.Utils;
@@ -15,20 +16,21 @@ public class AnimateTrayIcon
     private static int _currentIconIndex = 0;
     private static IntPtr _hWnd;
 
-    private static uint _uID = 1;
+    // private static uint _uID = 1;
+    // private static Guid _uID = 
 
     // private static ContextMenuStrip _contextMenu;
 
     public static void StartAnimateIcon()
     {
 
-        // _hWnd = WindowHelpers.MHwnd;
-        // SetupTrayIcon(_iconPaths[_currentIconIndex], Win32Helpers.NIM_ADD);
-        //
-        // _iconChangeTimer = new Timer(1000); // 每隔1000毫秒（1秒）更改图标
-        // _iconChangeTimer.Elapsed += OnTimedEvent;
-        // _iconChangeTimer.AutoReset = true;
-        // _iconChangeTimer.Enabled = true;
+        // _hWnd = TrayIconView.TrayWindowHandle;
+        SetupTrayIcon(_iconPaths[_currentIconIndex], Win32Helpers.NIM_MODIFY);
+        
+        _iconChangeTimer = new Timer(1000); // 每隔1000毫秒（1秒）更改图标
+        _iconChangeTimer.Elapsed += OnTimedEvent;
+        _iconChangeTimer.AutoReset = true;
+        _iconChangeTimer.Enabled = true;
         //raw 事件绑定
 
       
@@ -40,12 +42,15 @@ public class AnimateTrayIcon
         Win32Helpers.NOTIFYICONDATA nid = new Win32Helpers.NOTIFYICONDATA();
         nid.cbSize = (uint)Marshal.SizeOf(nid);
 
-        nid.hWnd = _hWnd;
-        nid.uID = _uID;
+        // nid.hWnd = TrayIconView.TrayWindowHandle;
+        // nid.uID = _uID;
+        // nid.guidItem=TrayIconView.TrayIconId;
         nid.uFlags = Win32Helpers.NIF_MESSAGE | Win32Helpers.NIF_ICON | Win32Helpers.NIF_TIP;
         nid.uCallbackMessage = WM_TRAYMOUSEMESSAGE;
         nid.hIcon = LoadIconFromFile(iconPath);
         nid.szTip = "Fiend";
+
+        Debug.WriteLine($"guid:{nid.guidItem}");
 
         if (!Win32Helpers.Shell_NotifyIcon(message, ref nid))
         {
