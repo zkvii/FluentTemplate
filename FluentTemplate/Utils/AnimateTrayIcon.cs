@@ -10,7 +10,6 @@ namespace FluentTemplate.Utils;
 
 public class AnimateTrayIcon
 {
-    private static uint _trayIconId;
     private static Timer _iconChangeTimer;
     private static string[] _iconPaths = { "Assets/edit_active_1.ico", "Assets/edit_inactive.ico" };
     private static int _currentIconIndex = 0;
@@ -22,15 +21,14 @@ public class AnimateTrayIcon
 
     public static void StartAnimateIcon()
     {
-        _trayIconId = Win32Helpers.RegisterWindowMessage("WM_TRAYICON");
 
-        _hWnd = WindowHelpers.MHwnd;
-        SetupTrayIcon(_iconPaths[_currentIconIndex], Win32Helpers.NIM_ADD);
-
-        _iconChangeTimer = new Timer(1000); // 每隔1000毫秒（1秒）更改图标
-        _iconChangeTimer.Elapsed += OnTimedEvent;
-        _iconChangeTimer.AutoReset = true;
-        _iconChangeTimer.Enabled = true;
+        // _hWnd = WindowHelpers.MHwnd;
+        // SetupTrayIcon(_iconPaths[_currentIconIndex], Win32Helpers.NIM_ADD);
+        //
+        // _iconChangeTimer = new Timer(1000); // 每隔1000毫秒（1秒）更改图标
+        // _iconChangeTimer.Elapsed += OnTimedEvent;
+        // _iconChangeTimer.AutoReset = true;
+        // _iconChangeTimer.Enabled = true;
         //raw 事件绑定
 
       
@@ -45,7 +43,7 @@ public class AnimateTrayIcon
         nid.hWnd = _hWnd;
         nid.uID = _uID;
         nid.uFlags = Win32Helpers.NIF_MESSAGE | Win32Helpers.NIF_ICON | Win32Helpers.NIF_TIP;
-        nid.uCallbackMessage = _trayIconId;
+        nid.uCallbackMessage = WM_TRAYMOUSEMESSAGE;
         nid.hIcon = LoadIconFromFile(iconPath);
         nid.szTip = "Fiend";
 
@@ -70,28 +68,4 @@ public class AnimateTrayIcon
             Win32Helpers.LR_LOADFROMFILE);
     }
 
-    private static int WindowSubClass(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubclass, uint dwRefData)
-    {
-        switch (uMsg)
-        {
-            case WM_TRAYMOUSEMESSAGE:
-            {
-                switch (LOWORD((int)lParam))
-                {
-                    case WM_CONTEXTMENU:
-                    case WM_RBUTTONUP:
-                    {
-                        Windows.Graphics.PointInt32 ptCursor;
-                        GetCursorPos(out ptCursor);
-                        Debug.WriteLine($"{ptCursor}");
-                    }
-                        break;
-                }
-
-                break;
-            }
-        }
-
-        return DefSubclassProc(hWnd, uMsg, wParam, lParam);
-    }
 }

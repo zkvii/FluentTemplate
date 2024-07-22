@@ -29,7 +29,7 @@ namespace FluentTemplate
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainWindow : Window
+    public sealed partial class MainWindow 
     {
         private AppWindow m_AppWindow;
         private static Win32Helpers.SUBCLASSPROC SubClassDelegate;
@@ -43,14 +43,14 @@ namespace FluentTemplate
             Activated += MainWindow_Activated;
             AppTitleBar.SizeChanged += AppTitleBar_SizeChanged;
             AppTitleBar.Loaded += AppTitleBar_Loaded;
-            ExtendsContentIntoTitleBar = true;
-            if (ExtendsContentIntoTitleBar == true)
+
+            ExtendsContentIntoTitleBar=true;
+            if (ExtendsContentIntoTitleBar)
             {
                 m_AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
             }
 
             TitleBarTextBlock.Text = "FluentGraph";
-
 
             Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().TryEnqueue(
                 Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
@@ -58,57 +58,21 @@ namespace FluentTemplate
                 {
                     Microsoft.UI.WindowId myWndId =
                         Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WindowHelpers.MHwnd);
-                    var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(myWndId);
-                    appWindow.Resize(new SizeInt32(500, 800));
+                    // var appWindow = AppWindow.GetFromWindowId(myWndId);
 
                     //...
                 });
+
+            Closed += MainWindow_Closed;
             // SetupDispatcher();
-            SubClassDelegate = new SUBCLASSPROC(WindowSubClass);
-            bool bRet = SetWindowSubclass(WindowHelpers.MHwnd, SubClassDelegate, 0, 0);
         }
+
 
         // private int WindowSubClass(IntPtr hwnd, uint umsg, IntPtr wparam, IntPtr lparam, IntPtr uidsubclass, uint dwrefdata)
         // {
         //     throw new NotImplementedException();
         // }
-        private int WindowSubClass(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubclass,
-            uint dwRefData)
-        {
-            switch (uMsg)
-            {
-                case WM_TRAYMOUSEMESSAGE:
-                {
-                    switch (LOWORD((int)lParam))
-                    {
-                        case WM_CONTEXTMENU:
-                        case WM_RBUTTONUP:
-                        {
-                            Windows.Graphics.PointInt32 ptCursor;
-                            GetCursorPos(out ptCursor);
-                            Debug.WriteLine($"{ptCursor}");
-                        }
-                            break;
-                    }
-                }
-                    break;
-            }
 
-            return DefSubclassProc(hWnd, uMsg, wParam, lParam);
-        }
-        // private void SetupDispatcher()
-        // {
-        //     CoreApplication.GetCurrentView().Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () =>
-        //     {
-        //         var coreWindow = Window.Current.CoreWindow;
-        //         coreWindow.PointerPressed += CoreWindow_PointerPressed;
-        //     });
-        // }
-
-        private void CoreWindow_PointerPressed(CoreWindow sender, PointerEventArgs args)
-        {
-            Debug.WriteLine("undone");
-        }
 
 
         private void AppTitleBar_Loaded(object sender, RoutedEventArgs e)
@@ -159,7 +123,7 @@ namespace FluentTemplate
             nonClientInputSrc.SetRegionRects(NonClientRegionKind.Passthrough, rectArray);
         }
 
-        private Windows.Graphics.RectInt32 GetRect(Rect bounds, double scale)
+        private RectInt32 GetRect(Rect bounds, double scale)
         {
             return new Windows.Graphics.RectInt32(
                 _X: (int)Math.Round(bounds.X * scale),
@@ -174,12 +138,12 @@ namespace FluentTemplate
             if (args.WindowActivationState == WindowActivationState.Deactivated)
             {
                 TitleBarTextBlock.Foreground =
-                    (SolidColorBrush)App.Current.Resources["WindowCaptionForegroundDisabled"];
+                    (SolidColorBrush)Application.Current.Resources["WindowCaptionForegroundDisabled"];
             }
             else
             {
                 TitleBarTextBlock.Foreground =
-                    (SolidColorBrush)App.Current.Resources["WindowCaptionForeground"];
+                    (SolidColorBrush)Application.Current.Resources["WindowCaptionForeground"];
             }
         }
 

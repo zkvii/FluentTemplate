@@ -52,11 +52,11 @@ public static class Program
                 UiThreadInitialized.WaitOne();
                 AnimateTrayIcon.StartAnimateIcon();
             });
-            bgThread.Start();
+            // bgThread.Start();
 
 
             uiThread.Join();
-            bgThread.Join();
+            // bgThread.Join();
         }
     }
 

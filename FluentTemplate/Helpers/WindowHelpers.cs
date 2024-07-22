@@ -8,10 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Graphics;
 using ABI.Windows.UI.Core;
+using FluentTemplate.Views;
 using Microsoft.UI.Windowing;
 using static FluentTemplate.Helpers.Win32Helpers;
 using Window = Microsoft.UI.Xaml.Window;
 using Microsoft.UI;
+using WinUIEx;
+
 namespace FluentTemplate.Helpers;
 
 public  class WindowHelpers
@@ -201,4 +204,6 @@ public  class WindowHelpers
             hWindow?.Close();
         }
     }
+
+ 
 }
