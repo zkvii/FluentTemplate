@@ -2,11 +2,13 @@
 using Microsoft.Windows.AppLifecycle;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.Storage;
+using FluentTemplate.Utils;
 using Microsoft.UI.Xaml;
 
 namespace FluentTemplate;
@@ -14,6 +16,8 @@ namespace FluentTemplate;
 public static class Program
 {
     private static int activationCount = 1;
+
+    public static ManualResetEvent UiThreadInitialized = new(false);
     public static List<string> OutputStack { get; private set; }
 
 
@@ -30,17 +34,32 @@ public static class Program
         bool isRedirect = DecideRedirection();
         if (!isRedirect)
         {
-            Application.Start((p) =>
+            var uiThread = new Thread(() =>
             {
-                var context = new DispatcherQueueSynchronizationContext(
-                    DispatcherQueue.GetForCurrentThread());
-                SynchronizationContext.SetSynchronizationContext(context);
-                new App();
+                Application.Start((p) =>
+                {
+                    var context = new DispatcherQueueSynchronizationContext(
+                        DispatcherQueue.GetForCurrentThread());
+                    SynchronizationContext.SetSynchronizationContext(context);
+                    new App();
+                });
             });
-        }
+            uiThread.Start();
 
-        
+
+            var bgThread = new Thread(() =>
+            {
+                UiThreadInitialized.WaitOne();
+                AnimateTrayIcon.StartAnimateIcon();
+            });
+            bgThread.Start();
+
+
+            uiThread.Join();
+            bgThread.Join();
+        }
     }
+
 
     #region Report helpers
 
@@ -49,7 +68,7 @@ public static class Program
         // If we already have a form, display the message now.
         // Otherwise, add it to the collection for displaying later.
         if (Application.Current is App thisApp && thisApp.AppWindow != null
-                                       && thisApp.AppWindow is MainWindow mainWindow)
+                                               && thisApp.AppWindow is MainWindow mainWindow)
         {
             mainWindow.OutputMessage(message);
         }
@@ -100,7 +119,6 @@ public static class Program
         {
             ReportFileArgs($"OnActivated ({activationCount++})", args);
         }
-
     }
 
     public static void GetActivationInfo()
@@ -215,4 +233,3 @@ public static class Program
 
     #endregion
 }
-

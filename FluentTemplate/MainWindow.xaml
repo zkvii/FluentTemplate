@@ -60,7 +60,7 @@
             </Grid>
             <Grid Grid.Column="1">
                 <views:FluentTableView />
-                <views:TrayIconView></views:TrayIconView>
+                <!-- <views:TrayIconView></views:TrayIconView> -->
             </Grid>
 
         </Grid>

@@ -15,6 +15,11 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Media;
 using AppInstance = Microsoft.Windows.AppLifecycle.AppInstance;
 using Microsoft.UI.Xaml.Controls;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
+using PointerEventArgs = Windows.UI.Core.PointerEventArgs;
+using WindowActivatedEventArgs = Microsoft.UI.Xaml.WindowActivatedEventArgs;
+using static FluentTemplate.Helpers.Win32Helpers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -27,6 +32,8 @@ namespace FluentTemplate
     public sealed partial class MainWindow : Window
     {
         private AppWindow m_AppWindow;
+        private static Win32Helpers.SUBCLASSPROC SubClassDelegate;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -54,8 +61,53 @@ namespace FluentTemplate
                     var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(myWndId);
                     appWindow.Resize(new SizeInt32(500, 800));
 
-            //...
+                    //...
                 });
+            // SetupDispatcher();
+            SubClassDelegate = new SUBCLASSPROC(WindowSubClass);
+            bool bRet = SetWindowSubclass(WindowHelpers.MHwnd, SubClassDelegate, 0, 0);
+        }
+
+        // private int WindowSubClass(IntPtr hwnd, uint umsg, IntPtr wparam, IntPtr lparam, IntPtr uidsubclass, uint dwrefdata)
+        // {
+        //     throw new NotImplementedException();
+        // }
+        private int WindowSubClass(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubclass,
+            uint dwRefData)
+        {
+            switch (uMsg)
+            {
+                case WM_TRAYMOUSEMESSAGE:
+                {
+                    switch (LOWORD((int)lParam))
+                    {
+                        case WM_CONTEXTMENU:
+                        case WM_RBUTTONUP:
+                        {
+                            Windows.Graphics.PointInt32 ptCursor;
+                            GetCursorPos(out ptCursor);
+                            Debug.WriteLine($"{ptCursor}");
+                        }
+                            break;
+                    }
+                }
+                    break;
+            }
+
+            return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+        }
+        // private void SetupDispatcher()
+        // {
+        //     CoreApplication.GetCurrentView().Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () =>
+        //     {
+        //         var coreWindow = Window.Current.CoreWindow;
+        //         coreWindow.PointerPressed += CoreWindow_PointerPressed;
+        //     });
+        // }
+
+        private void CoreWindow_PointerPressed(CoreWindow sender, PointerEventArgs args)
+        {
+            Debug.WriteLine("undone");
         }
 
 
@@ -89,15 +141,15 @@ namespace FluentTemplate
             // Get the rectangle around the AutoSuggestBox control.
             GeneralTransform transform = TitleBarSearchBox.TransformToVisual(null);
             Rect bounds = transform.TransformBounds(new Rect(0, 0,
-                                                             TitleBarSearchBox.ActualWidth,
-                                                             TitleBarSearchBox.ActualHeight));
+                TitleBarSearchBox.ActualWidth,
+                TitleBarSearchBox.ActualHeight));
             Windows.Graphics.RectInt32 SearchBoxRect = GetRect(bounds, scaleAdjustment);
 
             // Get the rectangle around the PersonPicture control.
             transform = PersonPic.TransformToVisual(null);
             bounds = transform.TransformBounds(new Rect(0, 0,
-                                                        PersonPic.ActualWidth,
-                                                        PersonPic.ActualHeight));
+                PersonPic.ActualWidth,
+                PersonPic.ActualHeight));
             Windows.Graphics.RectInt32 PersonPicRect = GetRect(bounds, scaleAdjustment);
 
             var rectArray = new Windows.Graphics.RectInt32[] { SearchBoxRect, PersonPicRect };
@@ -205,7 +257,7 @@ namespace FluentTemplate
             }
         }
 
-      
+
         private void MainWindow_Closed(object sender, WindowEventArgs args)
         {
             args.Handled = true;

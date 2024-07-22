@@ -372,4 +372,93 @@ public static class Win32Helpers
 
     [DllImport("User32.dll", SetLastError = true)]
     public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+
+    public static int HIWORD(int n)
+    {
+        return (n >> 16) & 0xffff;
+    }
+    public static int LOWORD(int n)
+    {
+        return n & 0xffff;
+    }
+
+    public delegate int SUBCLASSPROC(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubclass, uint dwRefData);
+
+
+    [DllImport("Comctl32.dll", SetLastError = true)]
+    public static extern bool SetWindowSubclass(IntPtr hWnd, SUBCLASSPROC pfnSubclass, uint uIdSubclass, uint dwRefData);
+
+    [DllImport("Comctl32.dll", SetLastError = true)]
+    public static extern int DefSubclassProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
+
+    public const int WM_CONTEXTMENU = 0x007B;
+    public const int WM_RBUTTONDOWN = 0x0204;
+    public const int WM_RBUTTONUP = 0x0205;
+    public const int WM_ENTERMENULOOP = 0x0211;
+    public const int WM_EXITMENULOOP = 0x0212;
+    public const int WM_INITMENUPOPUP = 0x0117;
+    public const int WM_UNINITMENUPOPUP = 0x0125;
+
+    public const int WM_DRAWITEM = 0x002B;
+    public const int WM_MEASUREITEM = 0x002C;
+
+    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern bool GetCursorPos(out Windows.Graphics.PointInt32 lpPoint);
+
+    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern IntPtr CreatePopupMenu();
+
+    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern int GetMenuItemCount(IntPtr hMenu);
+
+    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern bool DestroyMenu(IntPtr hMenu);
+
+    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern bool AppendMenu(IntPtr hMenu, uint uFlags, IntPtr uIDNewItem, string lpNewItem);
+
+    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern bool ModifyMenu(IntPtr hMnu, uint uPosition, uint uFlags, IntPtr uIDNewItem, IntPtr lpNewItem);
+
+    public const int MF_STRING = 0x00000000;
+    public const int MF_BITMAP = 0x00000004;
+    public const int MF_OWNERDRAW = 0x00000100;
+
+    public const int MF_POPUP = 0x00000010;
+    public const int MF_MENUBARBREAK = 0x00000020;
+    public const int MF_MENUBREAK = 0x00000040;
+    public const int MF_SEPARATOR = 0x00000800;
+
+    public const int MF_BYCOMMAND = 0x00000000;
+    public const int MF_BYPOSITION = 0x00000400;
+
+    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern uint TrackPopupMenu(IntPtr hMenu, uint uFlags, int x, int y, int nReserved, IntPtr hWnd, IntPtr prcRect);
+
+    public const int TPM_LEFTBUTTON = 0x0000;
+    public const int TPM_RIGHTBUTTON = 0x0002;
+    public const int TPM_LEFTALIGN = 0x0000;
+    public const int TPM_CENTERALIGN = 0x0004;
+    public const int TPM_RIGHTALIGN = 0x0008;
+    public const int TPM_TOPALIGN = 0x0000;
+    public const int TPM_VCENTERALIGN = 0x0010;
+    public const int TPM_BOTTOMALIGN = 0x0020;
+    public const int TPM_HORIZONTAL = 0x0000;     /* Horz alignment matters more */
+    public const int TPM_VERTICAL = 0x0040;     /* Vert alignment matters more */
+    public const int TPM_NONOTIFY = 0x0080;     /* Don't send any notification msgs */
+    public const int TPM_RETURNCMD = 0x0100;
+    public const int TPM_RECURSE = 0x0001;
+    public const int TPM_HORPOSANIMATION = 0x0400;
+    public const int TPM_HORNEGANIMATION = 0x0800;
+    public const int TPM_VERPOSANIMATION = 0x1000;
+    public const int TPM_VERNEGANIMATION = 0x2000;
+    public const int TPM_NOANIMATION = 0x4000;
+    public const int TPM_LAYOUTRTL = 0x8000;
+    public const int TPM_WORKAREA = 0x10000;
+
+    public const int WM_TRAYMOUSEMESSAGE = WM_USER + 1024;
 }
