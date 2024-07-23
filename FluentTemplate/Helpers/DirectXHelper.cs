@@ -15,13 +15,12 @@ public static class DirectXHelper
     public static IDXGIDevice DxgiDevice;
     public static IDXGISwapChain1 SwapChain;
     public static ID3D11Texture2D BackBuffer;
-    public static ID3D11RenderTargetView RenderTargetView;
+    // public static ID3D11RenderTargetView RenderTargetView;
 
     public static IDXGISurface DxgiBackBuffer;
     public static ID2D1Factory1 D2dFactory;
     public static ID2D1Device D2dDevice;
     public static ID2D1DeviceContext D2dContext;
-    public static ID2D1SolidColorBrush D2dbrush;
     public static ID2D1Bitmap1 D2dTargetBitmap1;
 
     public static Vortice.WinUI.ISwapChainPanelNative SwapChainPanel;
@@ -126,7 +125,6 @@ public static class DirectXHelper
         bitmapProperties.DpiY = 144;
         D2dTargetBitmap1 = D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, bitmapProperties);
         D2dContext.Target = D2dTargetBitmap1;
-        D2dbrush = D2dContext.CreateSolidColorBrush(new Color4(0.0f, 0.0f, 1.0f, 1.0f));
 
         DxgiDevice.Dispose();
 

@@ -17,6 +17,7 @@
     <!-- <UseWindowsForms>true</UseWindowsForms> -->
     <!-- <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained> -->
     <WindowsPackageType>None</WindowsPackageType>
+    <ApplicationIcon>Assets\edit_inactive.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

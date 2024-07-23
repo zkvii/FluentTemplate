@@ -23,6 +23,34 @@ namespace FluentTemplate.Views
 
             TableSwapChain.PointerPressed += TableSwapChain_PointerPressed;
 
+            PointerPressed += FluentTableView_PointerPressed;
+            PointerMoved += FluentTableView_PointerMoved;
+            PointerReleased+=FluentTableView_PointerReleased;
+            PointerExited += FluentTableView_PointerExited;
+
+        }
+
+        private void FluentTableView_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            var position = e.GetCurrentPoint(TableSwapChain).Position;
+            viewModel.OnPointerReleased(position);
+        }
+
+        private void FluentTableView_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            viewModel.OnPointerExited();
+        }
+
+        private void FluentTableView_PointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            var position = e.GetCurrentPoint(TableSwapChain).Position;
+            viewModel.OnPointerMoved(position);
+        }
+
+        private void FluentTableView_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            var position = e.GetCurrentPoint(TableSwapChain).Position;
+            viewModel.OnPointerPressed(position);
         }
 
         private void TableSwapChain_PointerPressed(object sender, PointerRoutedEventArgs e)
