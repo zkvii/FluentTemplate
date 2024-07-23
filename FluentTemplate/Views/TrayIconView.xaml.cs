@@ -56,12 +56,12 @@ public sealed partial class TrayIconView
     {
         timer.Start();
     }
-
+    //
     [RelayCommand]
     public void ShowHideWindow()
     {
-        Debug.WriteLine(TrayIconB.Id);
-
+        // Debug.WriteLine(TrayIconB.Id);
+    
         if (IsWindowVisible)
         {
             WindowHelpers.HideWindow();
@@ -74,7 +74,7 @@ public sealed partial class TrayIconView
         }
     }
 
-
+    
     [RelayCommand]
     public void ExitApplication()
     {
@@ -82,4 +82,5 @@ public sealed partial class TrayIconView
         // WindowHelpers.CloseWindow();
         Environment.Exit(0);
     }
+
 }

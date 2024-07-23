@@ -13,6 +13,11 @@ public class FluentTableViewModel
 {
     private DispatcherTimer timer;
 
+    private int TotalHeight;
+    private int TotalWidth;
+    private int ViewBoxWidth;
+    private int ViewBoxHeight;
+
     private void Timer_Tick(object sender, object e)
     {
         Draw();
@@ -26,6 +31,7 @@ public class FluentTableViewModel
 
         //draw a line
         DirectXHelper.D2dContext.DrawLine(new Vector2(0, 0), new Vector2(100, 100), DirectXHelper.D2dbrush, 2);
+
 
         DirectXHelper.D2dContext.EndDraw();
 

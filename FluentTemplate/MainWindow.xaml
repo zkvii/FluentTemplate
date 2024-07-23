@@ -12,8 +12,10 @@
     Height="600"
     Width="1200"
     mc:Ignorable="d">
-
-    <Grid>
+    <Window.SystemBackdrop>
+        <MicaBackdrop></MicaBackdrop>
+    </Window.SystemBackdrop>
+    <Grid x:Name="Root">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -52,42 +54,42 @@
                            Grid.Column="6"
                            Height="32" Margin="0,0,16,0" />
         </Grid>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Width="200" Background="Aqua">
+        <Grid Grid.Row="1" x:Name="MainPanel">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48" x:Name="MenuBarRow" />
+                <RowDefinition Height="40" x:Name="IconToolRow" />
+                <RowDefinition Height="*" x:Name="WorkingPanelRow" />
+                <RowDefinition Height="48" x:Name="BottomBarRow" />
 
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" x:Name="MenuBar" >
+                <views:MenuBarView></views:MenuBarView>
             </Grid>
-            <Grid Grid.Column="1">
-                <views:FluentTableView />
+            <Grid Grid.Row="1" x:Name="IconBar" >
+                    <views:IconBarView></views:IconBarView>
+            </Grid>
+
+            <Grid Grid.Row="2" x:Name="WorkingPanel">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48" x:Name="LeftToolBarColumn" />
+                    <ColumnDefinition Width="*" x:Name="DataPanelColumn" />
+                    <ColumnDefinition Width="48" x:Name="RightToolBarColumn" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Width="200" Background="Teal" x:Name="LeftToolBar" >
+
+                </Grid>
+                <Grid Grid.Column="1" x:Name="DataPanel">
+                    <views:FluentTableView />
+                </Grid>
+                <Grid Grid.Column="2" x:Name="RightToolBar" Background="#987D9A">
+
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="3" x:Name="BottomBar" Background="#BB9AB1">
+
                 <views:TrayIconView></views:TrayIconView>
             </Grid>
-
         </Grid>
-        <!-- <NavigationView Grid.Row="1" -->
-        <!--                 IsBackButtonVisible="Collapsed" -->
-        <!--                 IsSettingsVisible="False"> -->
-        <!--     <StackPanel> -->
-        <!--         <TextBlock Text="Content" -->
-        <!--                    Style="{ThemeResource TitleTextBlockStyle}" -->
-        <!--                    Margin="32,0,0,0" /> -->
-        <!--         <StackPanel Grid.Row="1" VerticalAlignment="Center"> -->
-        <!--             <Button Margin="4" x:Name="CompactoverlaytBtn" -->
-        <!--                     Content="Enter CompactOverlay" -->
-        <!--                     Click="SwitchPresenter" /> -->
-        <!--             <Button Margin="4" x:Name="FullscreenBtn" -->
-        <!--                     Content="Enter FullScreen" -->
-        <!--                     Click="SwitchPresenter" /> -->
-        <!--             <Button Margin="4" x:Name="OverlappedBtn" -->
-        <!--                     Content="Revert to default (Overlapped)" -->
-        <!--                     Click="SwitchPresenter" /> -->
-        <!--         </StackPanel> -->
-        <!--       -->
-        <!--     </StackPanel> -->
-        <!-- </NavigationView> -->
+
     </Grid>
-
-
 </winUiEx:WindowEx>

@@ -24,6 +24,8 @@
     <None Remove="Assets\edit_active_2.ico" />
     <None Remove="Assets\edit_inactive.ico" />
     <None Remove="Views\FluentTableView.xaml" />
+    <None Remove="Views\IconBarView.xaml" />
+    <None Remove="Views\MenuBarView.xaml" />
     <None Remove="Views\TrayIconView.xaml" />
     <None Remove="Views\TryIconView.xaml" />
   </ItemGroup>
@@ -74,6 +76,16 @@
     <Content Update="Assets\edit_active_2.ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\IconBarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\MenuBarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\TrayIconView.xaml">

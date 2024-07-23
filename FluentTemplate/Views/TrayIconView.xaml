@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <UserControl
     x:Class="FluentTemplate.Views.TrayIconView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -13,8 +14,13 @@
         <converters:BoolToImageSourceConverter
             x:Key="BoolToImageSourceConverter"
             FalseImage="ms-appx:///Assets/edit_inactive.ico"
-            TrueImage="ms-appx:///Assets/edit_inactive.ico"
-        />
+            TrueImage="ms-appx:///Assets/edit_inactive.ico" />
+        <ControlTemplate x:Key="CustomFlyoutTemplate" TargetType="MenuFlyoutItem">
+            <StackPanel Orientation="Vertical" Background="Transparent" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                <!-- <Button Content="Show/Hide" Width="100" CornerRadius="0" Click="ExitWindow"/> -->
+                <!-- <Button Content="Exit" Width="100" CornerRadius="0" Click="ExitWindow"/> -->
+            </StackPanel>
+        </ControlTemplate>
     </UserControl.Resources>
     <notifyIcon:TaskbarIcon
         x:Name="TrayIconB"
@@ -23,17 +29,28 @@
         LeftClickCommand="{x:Bind ShowHideWindowCommand}"
         NoLeftClickDelay="True"
         ToolTipText="ToolTip"
+        
         IconSource="{x:Bind IsWindowVisible, Converter={StaticResource BoolToImageSourceConverter}}">
 
-        <notifyIcon:TaskbarIcon.ContextFlyout>
-            <MenuFlyout AreOpenCloseAnimationsEnabled="False">
+        <notifyIcon:TaskbarIcon.ContextFlyout >
+            <!-- <MenuFlyout AreOpenCloseAnimationsEnabled="True"> -->
+            <!--     <MenuFlyoutItem Template="{StaticResource CustomFlyoutTemplate}"  -->
+            <!--                     MinHeight="400" -->
+            <!--                     MinWidth="100" -->
+            <!--                     ></MenuFlyoutItem> -->
+            <!-- </MenuFlyout> -->
+            <MenuFlyout AreOpenCloseAnimationsEnabled="True">
                 <MenuFlyoutItem
                     Command="{x:Bind ShowHideWindowCommand}"
                     Text="Show/Hide Window" />
                 <MenuFlyoutSeparator />
-                <MenuFlyoutItem
-                    Command="{x:Bind ExitApplicationCommand}"
-                    Text="Exit" />
+                <MenuFlyoutItem Height="200"
+                                Command="{x:Bind ExitApplicationCommand}"
+                                Text="Exit" />
+                <ToggleMenuFlyoutItem Text="Selected"></ToggleMenuFlyoutItem>
+                <!-- <MenuFlyoutItem Template="{StaticResource CustomIconTemplate}" > -->
+                <!-- -->
+                <!-- </MenuFlyoutItem> -->
             </MenuFlyout>
         </notifyIcon:TaskbarIcon.ContextFlyout>
     </notifyIcon:TaskbarIcon>
