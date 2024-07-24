@@ -1,71 +1,236 @@
 ﻿using System.Drawing.Printing;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Vortice.Direct2D1;
 using Vortice.Mathematics;
 using static FluentTemplate.Helpers.DirectXHelper;
-using static FluentTemplate.ViewModels.FluentTableViewModel;
 
 namespace FluentTemplate.ViewModels;
 
-public class TableScrollBar
+public enum ScrollBarOrientation
 {
-    public static float ScrollBarRegionWidth = 22;
-    public static Margins ScrollBarMargins = new(5, 5, 5, 5);
-    public static float ScrollBarHeight;
-    public static Rect ScrollRegionRect;
-    public static Rect ScrollBarRect;
-    public static Rect IndicatorRect;
-    public static ID2D1SolidColorBrush ScrollRegionBrush;
-    public static ID2D1SolidColorBrush ScrollBarBrush;
-    public static ID2D1SolidColorBrush IndicatorBrush;
-    public static bool IsScrollBarEntered = false;
-    public static bool IsScrollBarPressed = false;
-    public static int ScrollBarPressedPosition = 0;
-    public static int CurrentPosition = 0;
+    Horizontal,
+    Vertical
+}
 
-    public static void InitScrollBarResources()
+public partial class TableScrollBar : ObservableRecipient
+{
+    [ObservableProperty] private float _scrollBarRegionWidth = 20;
+    [ObservableProperty] private float _scrollBarRegionHeight;
+
+    [ObservableProperty] private Margins _scrollBarMargins = new(5, 5, 5, 5);
+
+    [ObservableProperty] private float _viewBoxHeight;
+    [ObservableProperty] private float _viewBoxWidth;
+
+    [ObservableProperty] private float _totalHeight;
+    [ObservableProperty] private float _totalWidth;
+
+    [ObservableProperty] private ScrollBarOrientation _orientation = ScrollBarOrientation.Vertical;
+
+    //scroll region position
+    [ObservableProperty] private float _scrollPositionX;
+    [ObservableProperty] private float _scrollPositionY=0;
+
+
+    partial void OnScrollBarRegionHeightChanged(float value)
     {
-        ScrollRegionBrush = D2dContext.CreateSolidColorBrush(Colors.Gray);
-        ScrollBarBrush = D2dContext.CreateSolidColorBrush(Colors.Black);
-        IndicatorBrush = D2dContext.CreateSolidColorBrush(Colors.Blue);
+        // ScrollBarRegionHeight = value;
+        UpdateComputeProperty();
+        UpdateAllRect();
     }
 
-    public static void DrawScrollBar(ID2D1DeviceContext dContext)
+    partial void OnTotalWidthChanged(float value)
     {
+        // TotalWidth = value;
+        UpdateComputeProperty();
+        UpdateAllRect();
+    }
+
+    partial void OnOrientationChanged(ScrollBarOrientation value)
+    {
+        // Orientation = value;
+        UpdateComputeProperty();
+        UpdateAllRect();
+    }
+
+
+    partial void OnViewBoxWidthChanged(float value)
+    {
+        // ViewBoxWidth = value;
+        UpdateComputeProperty();
+        UpdateAllRect();
+    }
+
+    partial void OnScrollBarRegionWidthChanged(float value)
+    {
+        // ScrollBarRegionWidth = value;
+        UpdateComputeProperty();
+        UpdateAllRect();
+    }
+
+    partial void OnScrollBarMarginsChanged(Margins value)
+    {
+        // ScrollBarMargins = value;
+        UpdateComputeProperty();
+        UpdateAllRect();
+    }
+
+    partial void OnViewBoxHeightChanged(float value)
+    {
+        // ViewBoxHeight = value;
+        UpdateComputeProperty();
+        UpdateAllRect();
+    }
+
+    partial void OnTotalHeightChanged(float value)
+    {
+        // TotalHeight = value;
+        UpdateComputeProperty();
+        UpdateAllRect();
+    }
+
+
+    public float ScrollBarWidth;
+    public float ScrollBarHeight;
+
+    public float ScrollBarMinStart;
+    public float ScrollBarMaxStart;
+
+    public float CurrentPosition;
+    public double ViewHoldingPercent;
+
+    //region
+    public Rect ScrollRegionRect;
+    public Rect ScrollBarRect;
+    // public Rect IndicatorRect;
+
+    public ID2D1SolidColorBrush ScrollRegionBrush;
+    public ID2D1SolidColorBrush ScrollBarBrush;
+    public ID2D1SolidColorBrush IndicatorBrush;
+
+    public bool IsScrollBarEntered = false;
+    public bool IsScrollBarPressed = false;
+    public int ScrollBarPressedPosition = 0;
+
+
+    // public void InitTableScrollBar(float viewBoxHeight, float viewBoxWidth, float totalWidth, float totalHeight)
+    // {
+    //     _viewBoxWidth = viewBoxWidth;
+    //     _viewBoxHeight = viewBoxHeight;
+    //     _totalWidth = totalWidth;
+    //     _totalHeight = totalHeight;
+    //
+    //     //hard property
+    //     _scrollBarRegionHeight = ViewBoxHeight;
+    //
+    //     _scrollPositionX = ViewBoxWidth - ScrollBarRegionWidth;
+    //     _scrollPositionY = 0;
+    //
+    //     //default
+    // }
+
+
+    public void LoadDrawResources()
+    {
+        if (ScrollBarBrush == null)
+        {
+            ScrollRegionBrush = D2dContext.CreateSolidColorBrush(Colors.Gray);
+        }
+
+        if (ScrollBarBrush == null)
+        {
+            ScrollBarBrush = D2dContext.CreateSolidColorBrush(Colors.Black);
+        }
+
+        if (IndicatorBrush == null)
+        {
+            IndicatorBrush = D2dContext.CreateSolidColorBrush(Colors.Blue);
+        }
+    }
+
+
+    //simple draw style
+    public void DrawScrollBar(ID2D1DeviceContext dContext)
+    {
+        LoadDrawResources();
+
+        //add bound rect
+
         dContext.FillRectangle(ScrollRegionRect, ScrollRegionBrush);
 
         if (IsScrollBarEntered)
-            dContext.DrawRectangle(IndicatorRect, IndicatorBrush, 2);
+            dContext.DrawRectangle(ScrollRegionRect, ScrollBarBrush, 1f);
 
         dContext.FillRectangle(ScrollBarRect, ScrollBarBrush);
     }
 
-    public static void ComputeScrollRegionRect()
+    public void UpdateComputeProperty()
     {
-        ScrollRegionRect = new Rect(ViewBoxWidth - ScrollBarRegionWidth, 0, ScrollBarRegionWidth, ViewBoxHeight);
+        if (Orientation == ScrollBarOrientation.Horizontal)
+            UpdateHorizontalComputeProperty();
+        else
+            UpdateVerticalComputeProperty();
     }
 
-    public static void ComputeScrollBarRect()
+    public void UpdateHorizontalComputeProperty()
     {
-        var percent = (double)ViewBoxHeight / TotalHeight;
-        ScrollBarHeight = (float)((ViewBoxHeight - ScrollBarMargins.Bottom - ScrollBarMargins.Top) * percent);
+    }
 
-        var x = ViewBoxWidth - ScrollBarRegionWidth + ScrollBarMargins.Left;
-        var y = CurrentPosition + ScrollBarMargins.Top;
+    //vertical property update
+    public void UpdateVerticalComputeProperty()
+    {
+        ScrollPositionX=ViewBoxWidth-ScrollBarRegionWidth;
+        ScrollBarRegionHeight=ViewBoxHeight;
+
+        ScrollBarWidth = ScrollBarRegionWidth - ScrollBarMargins.Left - ScrollBarMargins.Right;
+
+        ViewHoldingPercent = (double)ViewBoxHeight / TotalHeight;
+
+        ScrollBarHeight =
+            (float)((ScrollBarRegionHeight - ScrollBarMargins.Bottom - ScrollBarMargins.Top) * ViewHoldingPercent);
+
+
+        ScrollBarMinStart = ScrollPositionY + ScrollBarMargins.Top;
+        ScrollBarMaxStart = ScrollPositionY + ScrollBarRegionHeight - ScrollBarHeight - ScrollBarMargins.Bottom -
+                            ScrollBarMargins.Top;
+    }
+
+    //rect update
+    public void UpdateAllRect()
+    {
+        if (Orientation == ScrollBarOrientation.Horizontal)
+            RectsUpdateHorizontal();
+        else
+            RectsUpdateVertical();
+    }
+
+    private void RectsUpdateHorizontal()
+    {
+    }
+
+    public void RectsUpdateVertical()
+    {
+        ScrollRegionRect = new Rect(ScrollPositionX,
+            ScrollPositionY,
+            ScrollBarRegionWidth,
+            ScrollBarRegionHeight);
+
+
+        var barX = ScrollPositionX + ScrollBarMargins.Left;
+        var barY = ScrollPositionY + CurrentPosition + ScrollBarMargins.Top;
         var barW = ScrollBarRegionWidth - ScrollBarMargins.Right - ScrollBarMargins.Left;
         var barH = ScrollBarHeight;
 
-        ScrollBarRect = new Rect(x, y, barW, barH);
-    }
+        ScrollBarRect = new Rect(barX, barY, barW, barH);
 
-    public static void ComputeIndicatorRect()
-    {
-        var indicatorHeight = ViewBoxHeight - ScrollBarMargins.Bottom - ScrollBarMargins.Top;
 
-        var x = ViewBoxWidth - ScrollBarRegionWidth + ScrollBarMargins.Left;
-        var y = ScrollBarMargins.Top;
-        var barW = ScrollBarRegionWidth - ScrollBarMargins.Right - ScrollBarMargins.Left;
-        var barH = indicatorHeight;
-
-        IndicatorRect = new Rect(x, y, barW, barH);
+        // var indicatorHeight = ViewBoxHeight - ScrollBarMargins.Bottom - ScrollBarMargins.Top;
+        //
+        // var indX = ViewBoxWidth - ScrollBarRegionWidth + ScrollBarMargins.Left;
+        // var indY = ScrollBarMargins.Top;
+        // var indW = ScrollBarRegionWidth - ScrollBarMargins.Right - ScrollBarMargins.Left;
+        // var indH = indicatorHeight;
+        //
+        // IndicatorRect = new Rect(indX, indY, indW, indH);
     }
 }

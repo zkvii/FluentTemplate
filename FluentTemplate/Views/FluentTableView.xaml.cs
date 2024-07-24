@@ -28,6 +28,14 @@ namespace FluentTemplate.Views
             PointerReleased+=FluentTableView_PointerReleased;
             PointerExited += FluentTableView_PointerExited;
 
+            PointerWheelChanged += FluentTableView_PointerWheelChanged;
+
+        }
+
+        private void FluentTableView_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+        {
+            var delta = e.GetCurrentPoint(TableSwapChain).Properties.MouseWheelDelta;
+            viewModel.OnPointerWheelChanged(delta);
         }
 
         private void FluentTableView_PointerReleased(object sender, PointerRoutedEventArgs e)

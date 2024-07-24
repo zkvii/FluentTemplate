@@ -1,6 +1,7 @@
 ﻿using FluentTemplate.Helpers;
 using Microsoft.UI.Xaml;
 using System;
+using System.Diagnostics;
 using System.Numerics;
 using Windows.Foundation;
 using Microsoft.UI.Xaml.Controls;
@@ -16,104 +17,105 @@ namespace FluentTemplate.ViewModels;
 
 public partial class FluentTableViewModel : ObservableRecipient
 {
-    private DispatcherTimer timer;
+    private DispatcherTimer _timer;
 
-    public static int TotalWidth;
+    [ObservableProperty] private float _totalWidth;
 
-    public static int TotalHeight;
+    [ObservableProperty] private float _totalHeight;
 
-    public static int ViewBoxWidth;
+    [ObservableProperty] private float _viewBoxWidth;
 
-    public static int ViewBoxHeight;
+    [ObservableProperty] private float _viewBoxHeight;
 
-    [ObservableProperty]
-    private static int _scrollBarMovedLength;
-    partial void OnScrollBarMovedLengthChanged(int value)
+
+    partial void OnTotalWidthChanged(float value)
     {
-        CurrentPosition = Math.Max(0, Math.Min(TotalHeight - ViewBoxHeight, CurrentPosition + value));
-        ComputeScrollBarRect();
+        // TotalWidth = value;
+        FScrollBar.TotalWidth = value;
     }
+
+    partial void OnTotalHeightChanged(float value)
+    {
+        FScrollBar.TotalHeight = value;
+    }
+
+    partial void OnViewBoxWidthChanged(float value)
+    {
+        FScrollBar.ViewBoxWidth = value;
+    }
+
+    partial void OnViewBoxHeightChanged(float value)
+    {
+        FScrollBar.ViewBoxHeight = value;
+    }
+
+    public TableScrollBar FScrollBar { get; set; } = new();
+
 
     private void Timer_Tick(object sender, object e)
     {
-        ResourcesInit();
         Draw();
     }
 
-    private void ResourcesInit()
-    {
-        InitScrollBarResources();
-    }
 
     public void Draw()
     {
         D2dContext.BeginDraw();
         D2dContext.Clear(Colors.AliceBlue);
-        DrawScrollBar(D2dContext);
+        FScrollBar.DrawScrollBar(D2dContext);
         D2dContext.EndDraw();
-        SwapChain.Present(1, PresentFlags.None);
+        SwapChain.Present(2, PresentFlags.None);
     }
 
     public void InitSwapChain(SwapChainPanel tableSwapChain, Vector2 actualSize)
     {
-        timer = new DispatcherTimer();
-        timer.Tick += Timer_Tick;
-        timer.Interval = TimeSpan.FromMilliseconds(10D);
+        _timer = new DispatcherTimer();
+        _timer.Tick += Timer_Tick;
+        _timer.Interval = TimeSpan.FromMilliseconds(10D);
         InitDirectX();
         CreateSwapChain(tableSwapChain);
-        timer.Start();
+        _timer.Start();
     }
 
     public void ResizeView(Size newSize)
     {
-        ViewBoxWidth = (int)newSize.Width;
-        ViewBoxHeight = (int)newSize.Height;
-        TotalHeight = (int)newSize.Height + 100;
-        TotalWidth = (int)newSize.Width;
+        // ViewBoxWidth = (int)newSize.Width;
+        // ViewBoxHeight = (int)newSize.Height;
+        // TotalHeight = (int)newSize.Height + 100;
+        // TotalWidth = (int)newSize.Width;
+        ViewBoxWidth = newSize._width;
+        ViewBoxHeight = newSize._height;
+        TotalHeight = newSize._height + 100;
+        TotalWidth = newSize._width;
+
         ResizeSwapChain((int)newSize.Width, (int)newSize.Height);
-        ComputeScrollRegionRect();
-        ComputeScrollBarRect();
-        ComputeIndicatorRect();
     }
 
     public void OnPointerPressed(Point position)
     {
-        if (IsScrollBarEntered)
-        {
-            ScrollBarPressedPosition = (int)position.Y;
-            IsScrollBarPressed = true;
-        }
-        else
-        {
-            IsScrollBarPressed = false;
-        }
     }
 
     public void OnPointerMoved(Point position)
     {
-        IsScrollBarEntered = IsPointInRect((float)position.X, (float)position.Y, ScrollRegionRect);
-
-        if (IsScrollBarPressed)
+        if (IsPointInRect(position._x, position._y, FScrollBar.ScrollRegionRect))
         {
-            ScrollBarMovedLength = (int)position.Y - ScrollBarPressedPosition;
-            ScrollBarPressedPosition = (int)position.Y; // Update the pressed position to the current position
+            FScrollBar.IsScrollBarEntered=true;
+        }
+        else
+        {
+            FScrollBar.IsScrollBarEntered=false;
         }
     }
 
     public void OnPointerReleased(Point position)
     {
-        if (IsScrollBarPressed)
-        {
-            IsScrollBarPressed = false;
-            ScrollBarMovedLength = 0;
-            ScrollBarPressedPosition = 0;
-        }
     }
 
     public void OnPointerExited()
     {
-        IsScrollBarEntered = false;
-        IsScrollBarPressed = false;
+    }
 
+    public void OnPointerWheelChanged(int delta)
+    {
     }
 }
