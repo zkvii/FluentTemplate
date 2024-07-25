@@ -9,9 +9,11 @@ using Vortice.DXGI;
 using Vortice.Mathematics;
 using Size = Windows.Foundation.Size;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Vortice.Direct2D1;
 using static FluentTemplate.ViewModels.TableScrollBar;
 using static FluentTemplate.Helpers.DirectXHelper;
 using static FluentTemplate.Helpers.GeometryComputeHelper;
+using Rect = Vortice.Mathematics.Rect;
 
 namespace FluentTemplate.ViewModels;
 
@@ -63,6 +65,20 @@ public partial class FluentTableViewModel : ObservableRecipient
         D2dContext.BeginDraw();
         D2dContext.Clear(Colors.AliceBlue);
         FScrollBar.DrawScrollBar(D2dContext);
+
+        //sample drawing
+        D2dContext.AntialiasMode = AntialiasMode.Aliased;
+        var blackBrush=D2dContext.CreateSolidColorBrush(Colors.Black);
+        D2dContext.FillRectangle(new Rect(300f,100f,100f,100f),blackBrush);
+        D2dContext.AntialiasMode = AntialiasMode.PerPrimitive;
+        D2dContext.FillRectangle(new Rect(500f,100f,100f,100f),blackBrush);
+
+        var textFormat=D2DWriteFactory.CreateTextFormat("Arial", 20f);
+
+        var textLayout=D2DWriteFactory.CreateTextLayout("Hello World",textFormat,100f,100f);
+
+        D2dContext.DrawTextLayout(new Vector2(200,200),textLayout,blackBrush);
+
         D2dContext.EndDraw();
         SwapChain.Present(2, PresentFlags.None);
     }

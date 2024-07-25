@@ -198,6 +198,9 @@ public static class Win32Helpers
         return result;
     }
 
+    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern uint GetDpiForWindow(IntPtr hwnd);
+
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     public static extern uint RegisterWindowMessage(string lpString);

@@ -13,6 +13,7 @@ using Microsoft.UI.Windowing;
 using static FluentTemplate.Helpers.Win32Helpers;
 using Window = Microsoft.UI.Xaml.Window;
 using Microsoft.UI;
+using Microsoft.UI.Xaml;
 using WinUIEx;
 
 namespace FluentTemplate.Helpers;
@@ -34,6 +35,7 @@ public  class WindowHelpers
 
         return window;
     }
+
 
     public static IntPtr GetWindowHandle(Window window)
     {

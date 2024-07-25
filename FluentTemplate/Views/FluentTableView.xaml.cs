@@ -1,3 +1,4 @@
+using FluentTemplate.Helpers;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
@@ -15,21 +16,36 @@ namespace FluentTemplate.Views
         public FluentTableView()
         {
             InitializeComponent();
-            
-            viewModel=new FluentTableViewModel();
-            
-            viewModel.InitSwapChain(TableSwapChain,ActualSize);
+
+            InitView();
+
+
+       
+
+        }
+
+        private void InitView()
+        {
+            //this ensured ui created init
+            // Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().TryEnqueue(
+            //     Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
+            //     () =>
+            //     {
+            viewModel = new FluentTableViewModel();
+
+            viewModel.InitSwapChain(TableSwapChain, ActualSize);
             SizeChanged += FluentTableView_SizeChanged;
 
             TableSwapChain.PointerPressed += TableSwapChain_PointerPressed;
 
             PointerPressed += FluentTableView_PointerPressed;
             PointerMoved += FluentTableView_PointerMoved;
-            PointerReleased+=FluentTableView_PointerReleased;
+            PointerReleased += FluentTableView_PointerReleased;
             PointerExited += FluentTableView_PointerExited;
 
             PointerWheelChanged += FluentTableView_PointerWheelChanged;
 
+            // });
         }
 
         private void FluentTableView_PointerWheelChanged(object sender, PointerRoutedEventArgs e)

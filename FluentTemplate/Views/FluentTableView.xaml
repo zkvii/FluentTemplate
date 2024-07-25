@@ -33,6 +33,7 @@
 
     </UserControl.Resources>
     <SwapChainPanel x:Name="TableSwapChain" Height="300" Width="300">
-        
+        <Rectangle Width="100" Height="100" Fill="Black" ></Rectangle>
+        <TextBlock Text="Sample Text" Margin="20" Foreground="Black" FontSize="25"></TextBlock>
     </SwapChainPanel>
 </UserControl>

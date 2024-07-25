@@ -3,8 +3,10 @@ using SharpGen.Runtime;
 using Vortice.Direct2D1;
 using Vortice.Direct3D;
 using Vortice.Direct3D11;
+using Vortice.DirectWrite;
 using Vortice.DXGI;
 using Vortice.Mathematics;
+using FactoryType = Vortice.Direct2D1.FactoryType;
 using FeatureLevel = Vortice.Direct3D.FeatureLevel;
 
 namespace FluentTemplate.Helpers;
@@ -25,7 +27,7 @@ public static class DirectXHelper
 
     public static Vortice.WinUI.ISwapChainPanelNative SwapChainPanel;
     public static ID3D11Device D3Ddevice;
-
+    public static IDWriteFactory D2DWriteFactory;
 
 
 
@@ -55,6 +57,7 @@ public static class DirectXHelper
         D3Ddevice = tempDevice;
         // deviceContext = tempContext;
         DxgiDevice = D3Ddevice.QueryInterface<IDXGIDevice>();
+
     }
 
 
@@ -72,13 +75,16 @@ public static class DirectXHelper
         // renderTargetView = device.CreateRenderTargetView(backBuffer);
         DxgiBackBuffer = BackBuffer.QueryInterface<IDXGISurface>();
         var bitmapProperties = new BitmapProperties1();
-        bitmapProperties.PixelFormat.Format = Format.B8G8R8A8_UNorm;
+        bitmapProperties.PixelFormat.Format = Format.B8G8R8A8_UNorm_SRgb;
         bitmapProperties.PixelFormat.AlphaMode = Vortice.DCommon.AlphaMode.Premultiplied;
         bitmapProperties.BitmapOptions = BitmapOptions.Target | BitmapOptions.CannotDraw;
-        bitmapProperties.DpiX = 144;
-        bitmapProperties.DpiY = 144;
+        uint nDPI = Win32Helpers.GetDpiForWindow(WindowHelpers.MHwnd);
+        bitmapProperties.DpiX = nDPI;
+        bitmapProperties.DpiY = nDPI;
+        // bitmapProperties.DpiX = 96;
+        // bitmapProperties.DpiY = 96;
         D2dTargetBitmap1 = D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, bitmapProperties);
-        D2dContext.Target = D2dTargetBitmap1;
+        // D2dContext.Target = D2dTargetBitmap1;
     }
 
     public static void CreateSwapChain(SwapChainPanel swapChainCanvas)
@@ -115,16 +121,20 @@ public static class DirectXHelper
 
         D2dFactory = D2D1.D2D1CreateFactory<ID2D1Factory1>(FactoryType.MultiThreaded);
         D2dDevice = D2dFactory.CreateDevice(DxgiDevice);
-        D2dContext = D2dDevice.CreateDeviceContext(DeviceContextOptions.None);
+        D2dContext = D2dDevice.CreateDeviceContext(DeviceContextOptions.EnableMultithreadedOptimizations);
+        D2DWriteFactory= DWrite.DWriteCreateFactory<IDWriteFactory>();
 
         var bitmapProperties = new BitmapProperties1();
         bitmapProperties.PixelFormat.Format = Format.B8G8R8A8_UNorm;
         bitmapProperties.PixelFormat.AlphaMode = Vortice.DCommon.AlphaMode.Premultiplied;
         bitmapProperties.BitmapOptions = BitmapOptions.Target | BitmapOptions.CannotDraw;
-        bitmapProperties.DpiX = 144;
-        bitmapProperties.DpiY = 144;
+        uint nDPI = Win32Helpers.GetDpiForWindow(WindowHelpers.MHwnd);
+        bitmapProperties.DpiX = nDPI;
+        bitmapProperties.DpiY = nDPI;
+        // bitmapProperties.DpiX = 144;
+        // bitmapProperties.DpiY = 144;
         D2dTargetBitmap1 = D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, bitmapProperties);
-        D2dContext.Target = D2dTargetBitmap1;
+        // D2dContext.Target = D2dTargetBitmap1;
 
         DxgiDevice.Dispose();
 
