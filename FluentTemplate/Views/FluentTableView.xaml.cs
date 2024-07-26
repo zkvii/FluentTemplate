@@ -8,6 +8,7 @@ using FluentTemplate.ViewModels;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System.Diagnostics;
+using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -41,7 +42,7 @@ namespace FluentTemplate.Views
 
             _viewModel.InitSwapChain(TableSwapChain, ActualSize);
             // SizeChanged += FluentTableView_SizeChanged;
-            SizeChanged += FluentTableView_SizeChanged;
+            // SizeChanged += FluentTableView_SizeChanged;
 
 
             TableSwapChain.PointerPressed += TableSwapChain_PointerPressed;
@@ -53,8 +54,33 @@ namespace FluentTemplate.Views
 
             PointerWheelChanged += FluentTableView_PointerWheelChanged;
 
+            SwapScrollViewer.ViewChanging+=SwapScrollViewer_ViewChanging;
+            SizeChanged += SwapChainContainer_SizeChanged;
             TableSwapChain.CompositionScaleChanged += TableSwapChain_CompositionScaleChanged;
+        }
 
+        private void SwapScrollViewer_ViewChanging(object sender, ScrollViewerViewChangingEventArgs e)
+        {
+
+        }
+
+        private void SwapChainContainer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (Math.Abs(ScaleX - 1.0) < 0.1)
+            {
+                TableSwapChain.Width = e.NewSize.Width * TableSwapChain.CompositionScaleX;
+                TableSwapChain.Height = e.NewSize.Height * TableSwapChain.CompositionScaleY;
+            }
+            else
+            {
+                TableSwapChain.Width = e.NewSize.Width / ScaleX;
+                TableSwapChain.Height = e.NewSize.Height / ScaleY;
+            }
+
+            // swapchain resize
+
+            var newSize = new Size((int)TableSwapChain.Width, (int)TableSwapChain.Height);
+            _viewModel.ResizeView(newSize);
         }
 
         private void TableSwapChain_CompositionScaleChanged(SwapChainPanel sender, object args)
@@ -62,8 +88,8 @@ namespace FluentTemplate.Views
             var nDpi = Win32Helpers.GetDpiForWindow(WindowHelpers.MHwnd);
             ScaleX = 96.0f / nDpi;
             ScaleY = 96.0f / nDpi;
-
-            TableSwapChain.RenderTransform=new ScaleTransform() { ScaleX = ScaleX, ScaleY = ScaleY };
+            Debug.WriteLine($"Scale:{ScaleX}");
+            TableSwapChain.RenderTransform = new ScaleTransform() { ScaleX = ScaleX, ScaleY = ScaleY };
         }
 
         private void FluentTableView_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
@@ -106,20 +132,6 @@ namespace FluentTemplate.Views
                 ShowMode = FlyoutShowMode.TransientWithDismissOnPointerMoveAway
             };
             RightClickMenu.ShowAt(TableSwapChain, flyoutShowOptions);
-        }
-
-        private void FluentTableView_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //
-            // presenter resize
-            Debug.WriteLine(e.NewSize);
-
-            TableSwapChain.Width = e.NewSize.Width / ScaleX;
-            TableSwapChain.Height = e.NewSize.Height / ScaleY;
-            // swapchain resize
-            var newSize = new Size((int)TableSwapChain.Width, (int)TableSwapChain.Height);
-            _viewModel.ResizeView(newSize);
-            TableSwapChain_CompositionScaleChanged(null, null);
         }
     }
 }

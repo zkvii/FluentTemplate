@@ -76,10 +76,6 @@ namespace FluentTemplate
         //
         // }
 
-        private int WindowSubClass(IntPtr hwnd, uint umsg, IntPtr wparam, IntPtr lparam, IntPtr uidsubclass, uint dwrefdata)
-        {
-            throw new NotImplementedException();
-        }
 
 
 
