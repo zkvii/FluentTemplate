@@ -79,7 +79,7 @@
 
                 </Grid>
                 <Grid Grid.Column="1" x:Name="DataPanel">
-                    <views:FluentTableView />
+                    <views:FluentTableView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="FluentTableContent"/>
                 </Grid>
                 <Grid Grid.Column="2" x:Name="RightToolBar" Background="#987D9A">
 

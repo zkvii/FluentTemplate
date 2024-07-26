@@ -38,7 +38,7 @@ namespace FluentTemplate
         {
             InitializeComponent();
 
-            m_AppWindow = this.AppWindow;
+            m_AppWindow = AppWindow;
             m_AppWindow.Changed += AppWindow_Changed;
             Activated += MainWindow_Activated;
             AppTitleBar.SizeChanged += AppTitleBar_SizeChanged;
@@ -52,26 +52,34 @@ namespace FluentTemplate
 
             TitleBarTextBlock.Text = "FluentGraph";
 
-            Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().TryEnqueue(
-                Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
-                () =>
-                {
-                    Microsoft.UI.WindowId myWndId =
-                        Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WindowHelpers.MHwnd);
-                    // var appWindow = AppWindow.GetFromWindowId(myWndId);
+            // Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().TryEnqueue(
+            //     Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
+            //     () =>
+            //     {
+            //         Microsoft.UI.WindowId myWndId =
+            //             Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WindowHelpers.MHwnd);
+            //         // var appWindow = AppWindow.GetFromWindowId(myWndId);
+            //
+            //         //...
+            //     });
 
-                    //...
-                });
+            // DataPanel.SizeChanged += DataPanel_SizeChanged;
 
             Closed += MainWindow_Closed;
             // SetupDispatcher();
         }
 
-
-        // private int WindowSubClass(IntPtr hwnd, uint umsg, IntPtr wparam, IntPtr lparam, IntPtr uidsubclass, uint dwrefdata)
+        // private void DataPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         // {
-        //     throw new NotImplementedException();
+        //     FluentTableContent.Width= DataPanel.ActualWidth;
+        //     FluentTableContent.Height= DataPanel.ActualHeight;
+        //
         // }
+
+        private int WindowSubClass(IntPtr hwnd, uint umsg, IntPtr wparam, IntPtr lparam, IntPtr uidsubclass, uint dwrefdata)
+        {
+            throw new NotImplementedException();
+        }
 
 
 
@@ -98,26 +106,26 @@ namespace FluentTemplate
             // Specify the interactive regions of the title bar.
 
             double scaleAdjustment = AppTitleBar.XamlRoot.RasterizationScale;
-
+            
             RightPaddingColumn.Width = new GridLength(m_AppWindow.TitleBar.RightInset / scaleAdjustment);
             LeftPaddingColumn.Width = new GridLength(m_AppWindow.TitleBar.LeftInset / scaleAdjustment);
-
+            
             // Get the rectangle around the AutoSuggestBox control.
             GeneralTransform transform = TitleBarSearchBox.TransformToVisual(null);
             Rect bounds = transform.TransformBounds(new Rect(0, 0,
                 TitleBarSearchBox.ActualWidth,
                 TitleBarSearchBox.ActualHeight));
-            Windows.Graphics.RectInt32 SearchBoxRect = GetRect(bounds, scaleAdjustment);
-
+            RectInt32 searchBoxRect = GetRect(bounds, scaleAdjustment);
+            
             // Get the rectangle around the PersonPicture control.
             transform = PersonPic.TransformToVisual(null);
             bounds = transform.TransformBounds(new Rect(0, 0,
                 PersonPic.ActualWidth,
                 PersonPic.ActualHeight));
-            Windows.Graphics.RectInt32 PersonPicRect = GetRect(bounds, scaleAdjustment);
-
-            var rectArray = new Windows.Graphics.RectInt32[] { SearchBoxRect, PersonPicRect };
-
+            RectInt32 personPicRect = GetRect(bounds, scaleAdjustment);
+            
+            var rectArray = new[] { searchBoxRect, personPicRect };
+            
             InputNonClientPointerSource nonClientInputSrc =
                 InputNonClientPointerSource.GetForWindowId(this.AppWindow.Id);
             nonClientInputSrc.SetRegionRects(NonClientRegionKind.Passthrough, rectArray);
@@ -159,21 +167,21 @@ namespace FluentTemplate
                         AppTitleBar.Visibility = Visibility.Collapsed;
                         sender.TitleBar.ResetToDefault();
                         break;
-
+        
                     case AppWindowPresenterKind.FullScreen:
                         // Full screen - hide the custom title bar
                         // and the default system title bar.
                         AppTitleBar.Visibility = Visibility.Collapsed;
                         sender.TitleBar.ExtendsContentIntoTitleBar = true;
                         break;
-
+        
                     case AppWindowPresenterKind.Overlapped:
                         // Normal - hide the system title bar
                         // and use the custom title bar instead.
                         AppTitleBar.Visibility = Visibility.Visible;
                         sender.TitleBar.ExtendsContentIntoTitleBar = true;
                         break;
-
+        
                     default:
                         // Use the default system title bar.
                         sender.TitleBar.ResetToDefault();
@@ -192,20 +200,20 @@ namespace FluentTemplate
                     case "CompactoverlaytBtn":
                         newPresenterKind = AppWindowPresenterKind.CompactOverlay;
                         break;
-
+        
                     case "FullscreenBtn":
                         newPresenterKind = AppWindowPresenterKind.FullScreen;
                         break;
-
+        
                     case "OverlappedBtn":
                         newPresenterKind = AppWindowPresenterKind.Overlapped;
                         break;
-
+        
                     default:
                         newPresenterKind = AppWindowPresenterKind.Default;
                         break;
                 }
-
+        
                 // If the same presenter button was pressed as the
                 // mode we're in, toggle the window back to Default.
                 if (newPresenterKind == AppWindow.Presenter.Kind)

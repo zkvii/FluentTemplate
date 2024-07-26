@@ -75,16 +75,16 @@ public static class DirectXHelper
         // renderTargetView = device.CreateRenderTargetView(backBuffer);
         DxgiBackBuffer = BackBuffer.QueryInterface<IDXGISurface>();
         var bitmapProperties = new BitmapProperties1();
-        bitmapProperties.PixelFormat.Format = Format.B8G8R8A8_UNorm_SRgb;
+        bitmapProperties.PixelFormat.Format = Format.B8G8R8A8_UNorm;
         bitmapProperties.PixelFormat.AlphaMode = Vortice.DCommon.AlphaMode.Premultiplied;
         bitmapProperties.BitmapOptions = BitmapOptions.Target | BitmapOptions.CannotDraw;
-        uint nDPI = Win32Helpers.GetDpiForWindow(WindowHelpers.MHwnd);
-        bitmapProperties.DpiX = nDPI;
-        bitmapProperties.DpiY = nDPI;
+        // uint nDPI = Win32Helpers.GetDpiForWindow(WindowHelpers.MHwnd);
+        // bitmapProperties.DpiX = nDPI;
+        // bitmapProperties.DpiY = nDPI;
         // bitmapProperties.DpiX = 96;
         // bitmapProperties.DpiY = 96;
         D2dTargetBitmap1 = D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, bitmapProperties);
-        // D2dContext.Target = D2dTargetBitmap1;
+        D2dContext.Target = D2dTargetBitmap1;
     }
 
     public static void CreateSwapChain(SwapChainPanel swapChainCanvas)
@@ -128,13 +128,13 @@ public static class DirectXHelper
         bitmapProperties.PixelFormat.Format = Format.B8G8R8A8_UNorm;
         bitmapProperties.PixelFormat.AlphaMode = Vortice.DCommon.AlphaMode.Premultiplied;
         bitmapProperties.BitmapOptions = BitmapOptions.Target | BitmapOptions.CannotDraw;
-        uint nDPI = Win32Helpers.GetDpiForWindow(WindowHelpers.MHwnd);
-        bitmapProperties.DpiX = nDPI;
-        bitmapProperties.DpiY = nDPI;
+        // uint nDPI = Win32Helpers.GetDpiForWindow(WindowHelpers.MHwnd);
+        // bitmapProperties.DpiX = nDPI;
+        // bitmapProperties.DpiY = nDPI;
         // bitmapProperties.DpiX = 144;
         // bitmapProperties.DpiY = 144;
         D2dTargetBitmap1 = D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, bitmapProperties);
-        // D2dContext.Target = D2dTargetBitmap1;
+        D2dContext.Target = D2dTargetBitmap1;
 
         DxgiDevice.Dispose();
 

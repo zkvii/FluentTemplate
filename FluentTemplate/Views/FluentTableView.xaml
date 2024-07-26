@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <UserControl
     x:Class="FluentTemplate.Views.FluentTableView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -10,15 +11,15 @@
         <MenuFlyout x:Name="RightClickMenu">
             <MenuFlyoutItem Text="Add ">
                 <MenuFlyoutItem.Icon>
-                    <FontIcon Glyph="&#xE72D;"/>
+                    <FontIcon Glyph="&#xE72D;" />
                 </MenuFlyoutItem.Icon>
                 <MenuFlyoutItem.KeyboardAccelerators>
-                    <KeyboardAccelerator Key="S" Modifiers="Control"/>
+                    <KeyboardAccelerator Key="S" Modifiers="Control" />
                 </MenuFlyoutItem.KeyboardAccelerators>
             </MenuFlyoutItem>
             <MenuFlyoutItem Text="Copy" Icon="Copy">
                 <MenuFlyoutItem.KeyboardAccelerators>
-                    <KeyboardAccelerator Key="C" Modifiers="Control"/>
+                    <KeyboardAccelerator Key="C" Modifiers="Control" />
                 </MenuFlyoutItem.KeyboardAccelerators>
             </MenuFlyoutItem>
             <MenuFlyoutItem Text="Delete" Icon="Delete">
@@ -26,14 +27,16 @@
                     <KeyboardAccelerator Key="Delete" />
                 </MenuFlyoutItem.KeyboardAccelerators>
             </MenuFlyoutItem>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="Rename"/>
-            <MenuFlyoutItem Text="Select"/>
+            <MenuFlyoutSeparator />
+            <MenuFlyoutItem Text="Rename" />
+            <MenuFlyoutItem Text="Select" />
         </MenuFlyout>
 
     </UserControl.Resources>
-    <SwapChainPanel x:Name="TableSwapChain" Height="300" Width="300">
-        <Rectangle Width="100" Height="100" Fill="Black" ></Rectangle>
+    <SwapChainPanel x:Name="TableSwapChain" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="100" Height="100">
+        <Rectangle Width="100" Height="100" Fill="Black"></Rectangle>
         <TextBlock Text="Sample Text" Margin="20" Foreground="Black" FontSize="25"></TextBlock>
     </SwapChainPanel>
+
+
 </UserControl>

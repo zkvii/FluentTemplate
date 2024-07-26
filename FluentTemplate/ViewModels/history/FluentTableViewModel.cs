@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.UI.Xaml.Controls;
+﻿using FluentTemplate.Helpers;
 using Microsoft.UI.Xaml;
-using Vortice.Direct2D1;
-using Vortice.DirectWrite;
+using System;
+using System.Diagnostics;
+using System.Numerics;
+using Windows.Foundation;
+using Microsoft.UI.Xaml.Controls;
 using Vortice.DXGI;
 using Vortice.Mathematics;
+using Size = Windows.Foundation.Size;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Vortice.Direct2D1;
+using static FluentTemplate.ViewModels.TableScrollBar;
 using static FluentTemplate.Helpers.DirectXHelper;
 using static FluentTemplate.Helpers.GeometryComputeHelper;
 using Rect = Vortice.Mathematics.Rect;
-using Size = Windows.Foundation.Size;
 
 namespace FluentTemplate.ViewModels;
 
-public partial class FluentTableViewModel:ObservableRecipient
+public partial class FluentTableViewModel_Deprecated : ObservableRecipient
 {
     private DispatcherTimer _timer;
 
@@ -36,18 +33,22 @@ public partial class FluentTableViewModel:ObservableRecipient
     partial void OnTotalWidthChanged(float value)
     {
         // TotalWidth = value;
+        FScrollBar.TotalWidth = value;
     }
 
     partial void OnTotalHeightChanged(float value)
     {
+        FScrollBar.TotalHeight = value;
     }
 
     partial void OnViewBoxWidthChanged(float value)
     {
+        FScrollBar.ViewBoxWidth = value;
     }
 
     partial void OnViewBoxHeightChanged(float value)
     {
+        FScrollBar.ViewBoxHeight = value;
     }
 
     public TableScrollBar FScrollBar { get; set; } = new();
@@ -67,16 +68,16 @@ public partial class FluentTableViewModel:ObservableRecipient
 
         //sample drawing
         D2dContext.AntialiasMode = AntialiasMode.Aliased;
-        var blackBrush = D2dContext.CreateSolidColorBrush(Colors.Black);
-        D2dContext.FillRectangle(new Rect(300f, 100f, 100f, 100f), blackBrush);
+        var blackBrush=D2dContext.CreateSolidColorBrush(Colors.Black);
+        D2dContext.FillRectangle(new Rect(300f,100f,100f,100f),blackBrush);
         D2dContext.AntialiasMode = AntialiasMode.PerPrimitive;
-        D2dContext.FillRectangle(new Rect(500f, 100f, 100f, 100f), blackBrush);
+        D2dContext.FillRectangle(new Rect(500f,100f,100f,100f),blackBrush);
 
-        var textFormat = D2DWriteFactory.CreateTextFormat("Arial", 25f);
+        var textFormat=D2DWriteFactory.CreateTextFormat("Arial", 20f);
 
-        var textLayout = D2DWriteFactory.CreateTextLayout("Sample Text", textFormat, 100f, 100f);
+        var textLayout=D2DWriteFactory.CreateTextLayout("Hello World",textFormat,100f,100f);
 
-        D2dContext.DrawTextLayout(new Vector2(200, 200), textLayout, blackBrush);
+        D2dContext.DrawTextLayout(new Vector2(200,200),textLayout,blackBrush);
 
         D2dContext.EndDraw();
         SwapChain.Present(2, PresentFlags.None);
@@ -100,8 +101,9 @@ public partial class FluentTableViewModel:ObservableRecipient
         // TotalWidth = (int)newSize.Width;
         ViewBoxWidth = newSize._width;
         ViewBoxHeight = newSize._height;
-        TotalHeight = newSize._height;
+        TotalHeight = newSize._height + 100;
         TotalWidth = newSize._width;
+
         ResizeSwapChain((int)newSize.Width, (int)newSize.Height);
     }
 
@@ -113,11 +115,11 @@ public partial class FluentTableViewModel:ObservableRecipient
     {
         if (IsPointInRect(position._x, position._y, FScrollBar.ScrollRegionRect))
         {
-            FScrollBar.IsScrollBarEntered = true;
+            FScrollBar.IsScrollBarEntered=true;
         }
         else
         {
-            FScrollBar.IsScrollBarEntered = false;
+            FScrollBar.IsScrollBarEntered=false;
         }
     }
 
