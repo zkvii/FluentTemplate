@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System.Diagnostics;
 using WinRT.Interop;
+using static System.Double;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -54,20 +55,42 @@ namespace FluentTemplate.Views
 
             PointerWheelChanged += FluentTableView_PointerWheelChanged;
 
-            SwapScrollViewer.ViewChanging+=SwapScrollViewer_ViewChanging;
+            SwapScrollViewer.PointerWheelChanged += SwapScrollViewer_PointerWheelChanged;
+            SwapScrollViewer.ViewChanged += SwapScrollViewer_ViewChanged;
+
             SizeChanged += SwapChainContainer_SizeChanged;
             TableSwapChain.CompositionScaleChanged += TableSwapChain_CompositionScaleChanged;
         }
 
-        private void SwapScrollViewer_ViewChanging(object sender, ScrollViewerViewChangingEventArgs e)
+        private void SwapScrollViewer_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
-
+            UpdateInfinite();
         }
+
+        private void UpdateInfinite()
+        {
+            var currentBottomPosition = SwapScrollViewer.VerticalOffset + SwapScrollViewer.ViewportHeight;
+            if (Math.Abs(currentBottomPosition - VirtualContainer.ActualSize.Y) != 0) return;
+            if (IsNaN(VirtualContainer.Height))
+                VirtualContainer.Height = VirtualContainer.ActualSize.Y + 100;
+            else
+                VirtualContainer.Height += 100;
+        }
+
+
+        private void SwapScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            UpdateInfinite();
+            Debug.WriteLine($"VERTICAL OFFSET:{SwapScrollViewer.VerticalOffset}");
+        }
+
 
         private void SwapChainContainer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Debug.WriteLine($"{SwapScrollViewer.ActualSize}");
+            Debug.WriteLine($"Scroll size:{SwapScrollViewer.ActualSize}");
             Debug.WriteLine($"swapchain size{TableSwapChain.ActualSize}");
+            Debug.WriteLine($"virtual size{VirtualContainer.ActualSize}");
+
 
             if (Math.Abs(ScaleX - 1.0) < 0.1)
             {

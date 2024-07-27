@@ -27,6 +27,7 @@ public static class Program
     [STAThread]
     static void Main(string[] args)
     {
+        SettingsHelper.LoadSettings();
         WinRT.ComWrappersSupport.InitializeComWrappers();
 
         OutputStack = new();

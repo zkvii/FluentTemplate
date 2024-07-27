@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.UI.Xaml;
 using Microsoft.Windows.AppLifecycle;
@@ -8,18 +7,13 @@ using Windows.Graphics;
 using Windows.Storage;
 using FluentTemplate.Helpers;
 using WinUIEx;
-using Windows.ApplicationModel;
 using Windows.Foundation;
 using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Media;
 using AppInstance = Microsoft.Windows.AppLifecycle.AppInstance;
 using Microsoft.UI.Xaml.Controls;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
-using PointerEventArgs = Windows.UI.Core.PointerEventArgs;
 using WindowActivatedEventArgs = Microsoft.UI.Xaml.WindowActivatedEventArgs;
-using static FluentTemplate.Helpers.Win32Helpers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.

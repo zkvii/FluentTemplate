@@ -1,11 +1,13 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using SharpGen.Runtime;
+using Vortice.DCommon;
 using Vortice.Direct2D1;
 using Vortice.Direct3D;
 using Vortice.Direct3D11;
 using Vortice.DirectWrite;
 using Vortice.DXGI;
 using Vortice.Mathematics;
+using AlphaMode = Vortice.DXGI.AlphaMode;
 using FactoryType = Vortice.Direct2D1.FactoryType;
 using FeatureLevel = Vortice.Direct3D.FeatureLevel;
 
@@ -17,19 +19,28 @@ public static class DirectXHelper
     public static IDXGIDevice DxgiDevice;
     public static IDXGISwapChain1 SwapChain;
     public static ID3D11Texture2D BackBuffer;
-    // public static ID3D11RenderTargetView RenderTargetView;
+    public static ID2D1RenderTarget RenderTargetView;
 
     public static IDXGISurface DxgiBackBuffer;
     public static ID2D1Factory1 D2dFactory;
     public static ID2D1Device D2dDevice;
     public static ID2D1DeviceContext D2dContext;
-    public static ID2D1Bitmap1 D2dTargetBitmap1;
+    // public static ID2D1Bitmap1 D2dTargetBitmap1;
 
     public static Vortice.WinUI.ISwapChainPanelNative SwapChainPanel;
     public static ID3D11Device D3Ddevice;
     public static IDWriteFactory D2DWriteFactory;
 
+    public static BitmapProperties D2DBitmapProperties = new()
+    {
+        PixelFormat = new PixelFormat(Format.B8G8R8A8_UNorm, Vortice.DCommon.AlphaMode.Premultiplied),
+    };
 
+    public static RenderTargetProperties D2DRenderTargetProperties = new RenderTargetProperties()
+    {
+        Type = RenderTargetType.Default,
+        PixelFormat = new PixelFormat(Format.B8G8R8A8_UNorm, Vortice.DCommon.AlphaMode.Premultiplied)
+    };
 
     public static void InitDirectX()
     {
@@ -57,7 +68,6 @@ public static class DirectXHelper
         D3Ddevice = tempDevice;
         // deviceContext = tempContext;
         DxgiDevice = D3Ddevice.QueryInterface<IDXGIDevice>();
-
     }
 
 
@@ -65,26 +75,21 @@ public static class DirectXHelper
     {
         D2dContext.Target = null;
         // renderTargetView.Dispose();
+
+        RenderTargetView.Dispose();
+
         BackBuffer.Dispose();
         DxgiBackBuffer.Dispose();
-        D2dTargetBitmap1.Dispose();
 
         SwapChain.ResizeBuffers(2, width, height, Format.B8G8R8A8_UNorm,
             SwapChainFlags.None);
         BackBuffer = SwapChain.GetBuffer<ID3D11Texture2D>(0);
-        // renderTargetView = device.CreateRenderTargetView(backBuffer);
         DxgiBackBuffer = BackBuffer.QueryInterface<IDXGISurface>();
-        var bitmapProperties = new BitmapProperties1();
-        bitmapProperties.PixelFormat.Format = Format.B8G8R8A8_UNorm;
-        bitmapProperties.PixelFormat.AlphaMode = Vortice.DCommon.AlphaMode.Premultiplied;
-        bitmapProperties.BitmapOptions = BitmapOptions.Target | BitmapOptions.CannotDraw;
-        // uint nDPI = Win32Helpers.GetDpiForWindow(WindowHelpers.MHwnd);
-        // bitmapProperties.DpiX = nDPI;
-        // bitmapProperties.DpiY = nDPI;
-        // bitmapProperties.DpiX = 96;
-        // bitmapProperties.DpiY = 96;
-        D2dTargetBitmap1 = D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, bitmapProperties);
-        D2dContext.Target = D2dTargetBitmap1;
+     
+
+        RenderTargetView = D2dFactory.CreateDxgiSurfaceRenderTarget(DxgiBackBuffer, D2DRenderTargetProperties);
+
+        // D2dContext.Target = D2dTargetBitmap1;
     }
 
     public static void CreateSwapChain(SwapChainPanel swapChainCanvas)
@@ -122,19 +127,12 @@ public static class DirectXHelper
         D2dFactory = D2D1.D2D1CreateFactory<ID2D1Factory1>(FactoryType.MultiThreaded);
         D2dDevice = D2dFactory.CreateDevice(DxgiDevice);
         D2dContext = D2dDevice.CreateDeviceContext(DeviceContextOptions.EnableMultithreadedOptimizations);
-        D2DWriteFactory= DWrite.DWriteCreateFactory<IDWriteFactory>();
+        D2DWriteFactory = DWrite.DWriteCreateFactory<IDWriteFactory>();
 
-        var bitmapProperties = new BitmapProperties1();
-        bitmapProperties.PixelFormat.Format = Format.B8G8R8A8_UNorm;
-        bitmapProperties.PixelFormat.AlphaMode = Vortice.DCommon.AlphaMode.Premultiplied;
-        bitmapProperties.BitmapOptions = BitmapOptions.Target | BitmapOptions.CannotDraw;
-        // uint nDPI = Win32Helpers.GetDpiForWindow(WindowHelpers.MHwnd);
-        // bitmapProperties.DpiX = nDPI;
-        // bitmapProperties.DpiY = nDPI;
-        // bitmapProperties.DpiX = 144;
-        // bitmapProperties.DpiY = 144;
-        D2dTargetBitmap1 = D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, bitmapProperties);
-        D2dContext.Target = D2dTargetBitmap1;
+
+   
+        RenderTargetView = D2dFactory.CreateDxgiSurfaceRenderTarget(DxgiBackBuffer, D2DRenderTargetProperties);
+
 
         DxgiDevice.Dispose();
 
