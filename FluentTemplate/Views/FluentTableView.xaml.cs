@@ -66,6 +66,9 @@ namespace FluentTemplate.Views
 
         private void SwapChainContainer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            Debug.WriteLine($"{SwapScrollViewer.ActualSize}");
+            Debug.WriteLine($"swapchain size{TableSwapChain.ActualSize}");
+
             if (Math.Abs(ScaleX - 1.0) < 0.1)
             {
                 TableSwapChain.Width = e.NewSize.Width * TableSwapChain.CompositionScaleX;

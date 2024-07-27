@@ -62,7 +62,7 @@ public partial class FluentTableViewModel:ObservableRecipient
     public void Draw()
     {
         D2dContext.BeginDraw();
-        D2dContext.Clear(Colors.AliceBlue);
+        D2dContext.Clear(Colors.Transparent);
         FScrollBar.DrawScrollBar(D2dContext);
 
         //sample drawing

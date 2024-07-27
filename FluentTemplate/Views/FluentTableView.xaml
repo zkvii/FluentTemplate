@@ -34,12 +34,12 @@
 
     </UserControl.Resources>
 
-    <ScrollViewer Height="200" ZoomMode="Enabled" x:Name="SwapScrollViewer">
+    <ScrollViewer  ZoomMode="Enabled" HorizontalScrollMode="Enabled" x:Name="SwapScrollViewer" Background="AliceBlue" >
         <SwapChainPanel x:Name="TableSwapChain" HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch" Width="100"
-                        Height="100">
-            <Rectangle Width="100" Height="100" Fill="Black"></Rectangle>
-            <TextBlock Text="Sample Text" Margin="20" Foreground="Black" FontSize="25"></TextBlock>
+                        VerticalAlignment="Stretch" Width="2000"
+                        Height="3000">
+            <!-- <Rectangle Width="100" Height="100" Fill="Black"></Rectangle> -->
+            <!-- <TextBlock Text="Sample Text" Margin="20" Foreground="Black" FontSize="25"></TextBlock> -->
 
         </SwapChainPanel>
     </ScrollViewer>
