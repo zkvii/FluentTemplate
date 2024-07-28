@@ -25,20 +25,21 @@ public static class DirectXHelper
     public static ID2D1Factory1 D2dFactory;
     public static ID2D1Device D2dDevice;
     public static ID2D1DeviceContext D2dContext;
-    // public static ID2D1Bitmap1 D2dTargetBitmap1;
+    public static ID2D1Bitmap1 D2dTargetBitmap1;
 
     public static Vortice.WinUI.ISwapChainPanelNative SwapChainPanel;
     public static ID3D11Device D3Ddevice;
     public static IDWriteFactory D2DWriteFactory;
 
-    public static BitmapProperties D2DBitmapProperties = new()
+    public static BitmapProperties1 D2DBitmapProperties = new()
     {
+        BitmapOptions = BitmapOptions.Target|BitmapOptions.CannotDraw,
         PixelFormat = new PixelFormat(Format.B8G8R8A8_UNorm, Vortice.DCommon.AlphaMode.Premultiplied),
     };
 
-    public static RenderTargetProperties D2DRenderTargetProperties = new RenderTargetProperties()
+    public static RenderTargetProperties D2DRenderTargetProperties = new()
     {
-        Type = RenderTargetType.Default,
+        Type = RenderTargetType.Hardware,
         PixelFormat = new PixelFormat(Format.B8G8R8A8_UNorm, Vortice.DCommon.AlphaMode.Premultiplied)
     };
 
@@ -76,18 +77,19 @@ public static class DirectXHelper
         D2dContext.Target = null;
         // renderTargetView.Dispose();
 
-        RenderTargetView.Dispose();
+        // RenderTargetView.Dispose();
 
         BackBuffer.Dispose();
         DxgiBackBuffer.Dispose();
+        D2dTargetBitmap1.Dispose();
 
         SwapChain.ResizeBuffers(2, width, height, Format.B8G8R8A8_UNorm,
             SwapChainFlags.None);
         BackBuffer = SwapChain.GetBuffer<ID3D11Texture2D>(0);
         DxgiBackBuffer = BackBuffer.QueryInterface<IDXGISurface>();
      
-
-        RenderTargetView = D2dFactory.CreateDxgiSurfaceRenderTarget(DxgiBackBuffer, D2DRenderTargetProperties);
+        D2dTargetBitmap1= D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, D2DBitmapProperties);
+        // RenderTargetView = D2dFactory.CreateDxgiSurfaceRenderTarget(DxgiBackBuffer, D2DRenderTargetProperties);
 
         // D2dContext.Target = D2dTargetBitmap1;
     }
@@ -131,8 +133,10 @@ public static class DirectXHelper
 
 
    
-        RenderTargetView = D2dFactory.CreateDxgiSurfaceRenderTarget(DxgiBackBuffer, D2DRenderTargetProperties);
+        // RenderTargetView = D2dFactory.CreateDxgiSurfaceRenderTarget(DxgiBackBuffer, D2DRenderTargetProperties);
 
+        D2dTargetBitmap1 = D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, D2DBitmapProperties);
+        
 
         DxgiDevice.Dispose();
 

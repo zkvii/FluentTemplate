@@ -2,6 +2,7 @@
 using System.Numerics;
 using Windows.Foundation;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FluentTemplate.Views;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
 using Vortice.Direct2D1;
@@ -14,7 +15,7 @@ using Size = Windows.Foundation.Size;
 
 namespace FluentTemplate.ViewModels;
 
-public partial class FluentTableViewModel:ObservableRecipient
+public partial class FluentTableViewModel : ObservableRecipient
 {
     private DispatcherTimer _timer;
 
@@ -52,25 +53,52 @@ public partial class FluentTableViewModel:ObservableRecipient
         Draw();
     }
 
+    public ID2D1CommandList commandlist;
+
+    public void LoadResources()
+    {
+        D2dContext.Target = D2dTargetBitmap1;
+        commandlist = D2dContext.CreateCommandList();
+
+        D2dContext.Target = commandlist;
+        D2dContext.BeginDraw();
+        // D2dContext.Clear(Colors.AliceBlue);
+
+        var blackBrush = D2dContext.CreateSolidColorBrush(Colors.Black);
+        var textFormat = D2DWriteFactory.CreateTextFormat("Arial", 25f / FluentTableView.ScaleX);
+        D2dContext.DrawTextLayout(new Vector2(200f, 100f), D2DWriteFactory.CreateTextLayout("Sample Text", textFormat, 300f, 100f), blackBrush);
+
+        D2dContext.EndDraw();
+        commandlist.Close();
+    }
 
     public void Draw()
     {
-        // D2dContext.Target = D2dTargetBitmap1;
 
 
-        RenderTargetView.BeginDraw();
-        RenderTargetView.Clear(Colors.AliceBlue);
+        // RenderTargetView.BeginDraw();
+        // RenderTargetView.Clear(Colors.AliceBlue);
 
-        var blackBrush= RenderTargetView.CreateSolidColorBrush(Colors.Black);
-        var textFormat = D2DWriteFactory.CreateTextFormat("Arial", 31F);
+        //
+      
+        // D2dContext.Target = commandlist;
+        // D2dContext.BeginDraw();
+        //
+        // var blackBrush = RenderTargetView.CreateSolidColorBrush(Colors.Black);
+        // var textFormat = D2DWriteFactory.CreateTextFormat("Arial", 25f / FluentTableView.ScaleX);
+        //
+        // var textLayout = D2DWriteFactory.CreateTextLayout("Sample Text", textFormat, 300f, 100f);
+        // D2dContext.DrawTextLayout(new Vector2(200f, 100f), textLayout, blackBrush);
+        //
+        // D2dContext.EndDraw();
+        // commandlist.Close();
 
-        var textLayout = D2DWriteFactory.CreateTextLayout("Sample Text", textFormat, 300f, 100f);
-
-        RenderTargetView.FillRectangle(new Rect(300f, 100f, 200f, 100f), blackBrush);
-
-        RenderTargetView.DrawTextLayout(new Vector2(100f,100f),textLayout,blackBrush);
-
-        RenderTargetView.EndDraw();
+        D2dContext.Target= D2dTargetBitmap1;
+        
+        D2dContext.BeginDraw();
+        D2dContext.Clear(Colors.AliceBlue);
+        D2dContext.DrawImage(commandlist);
+        D2dContext.EndDraw();
 
         SwapChain.Present(2, PresentFlags.None);
     }
@@ -82,6 +110,7 @@ public partial class FluentTableViewModel:ObservableRecipient
         _timer.Interval = TimeSpan.FromMilliseconds(10D);
         InitDirectX();
         CreateSwapChain(tableSwapChain);
+        LoadResources();
         _timer.Start();
     }
 
@@ -89,7 +118,7 @@ public partial class FluentTableViewModel:ObservableRecipient
     {
         ViewBoxWidth = newSize._width;
         ViewBoxHeight = newSize._height;
-    
+
         ResizeSwapChain((int)newSize.Width, (int)newSize.Height);
     }
 
@@ -99,7 +128,6 @@ public partial class FluentTableViewModel:ObservableRecipient
 
     public void OnPointerMoved(Point position)
     {
-  
     }
 
     public void OnPointerReleased(Point position)

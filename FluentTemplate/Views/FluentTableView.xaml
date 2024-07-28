@@ -45,7 +45,7 @@
         <ScrollViewer ZoomMode="Enabled" VerticalScrollBarVisibility="Visible" HorizontalScrollMode="Enabled" x:Name="SwapScrollViewer"
                      >
             <StackPanel VerticalAlignment="Stretch" x:Name="VirtualContainer">
-                <TextBlock Text="Sample Text" Margin="10" FontFamily="Aria" Foreground="Black" FontSize="25">
+                <TextBlock Text="Sample Text" Margin="10" FontFamily="Arial" Foreground="Black" FontSize="25">
 
                 </TextBlock>
             </StackPanel>

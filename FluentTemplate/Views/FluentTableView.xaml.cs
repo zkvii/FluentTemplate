@@ -20,8 +20,8 @@ namespace FluentTemplate.Views
     {
         private FluentTableViewModel _viewModel;
 
-        public float ScaleX = 1.0f;
-        public float ScaleY = 1.0f;
+        public static float ScaleX = 1.0f;
+        public static float ScaleY = 1.0f;
 
         public FluentTableView()
         {
