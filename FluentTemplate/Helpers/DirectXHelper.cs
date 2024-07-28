@@ -1,4 +1,6 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using System.Diagnostics;
+using CommunityToolkit.WinUI.Helpers;
+using Microsoft.UI.Xaml.Controls;
 using SharpGen.Runtime;
 using Vortice.DCommon;
 using Vortice.Direct2D1;
@@ -136,11 +138,34 @@ public static class DirectXHelper
         // RenderTargetView = D2dFactory.CreateDxgiSurfaceRenderTarget(DxgiBackBuffer, D2DRenderTargetProperties);
 
         D2dTargetBitmap1 = D2dContext.CreateBitmapFromDxgiSurface(DxgiBackBuffer, D2DBitmapProperties);
-        
+
+        LoadStaticDrawResources();
 
         DxgiDevice.Dispose();
 
         // d2dFactory.DesktopDpi.X, d2dFactory.DesktopDpi.Y,
         // BitmapOptions.Target | BitmapOptions.CannotDraw);
+    }
+
+    public static ID2D1SolidColorBrush CellGridBrush;
+
+    public static ID2D1SolidColorBrush ColumnRowFillBrush;
+
+
+    public static ID2D1SolidColorBrush CellTextBrush;
+
+    public static ID2D1SolidColorBrush CellBackgroundBrush;
+
+    public static ID2D1SolidColorBrush CellSelectedBrush;
+
+    public static float BorderThick = 2.0f;
+
+    private static void LoadStaticDrawResources()
+    {
+        CellGridBrush= D2dContext.CreateSolidColorBrush("#CADABF".ToColor());
+        CellTextBrush= D2dContext.CreateSolidColorBrush("#000000".ToColor());
+        CellBackgroundBrush= D2dContext.CreateSolidColorBrush("#E7E8D8".ToColor());
+        CellSelectedBrush= D2dContext.CreateSolidColorBrush("#F9E400".ToColor());
+        ColumnRowFillBrush= D2dContext.CreateSolidColorBrush("#5F6F65".ToColor());
     }
 }

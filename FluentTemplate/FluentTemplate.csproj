@@ -29,6 +29,7 @@
     <None Remove="Assets\edit_active_2.ico" />
     <None Remove="Assets\edit_inactive.ico" />
     <None Remove="Data\Settings.json" />
+    <None Remove="Views\FluentPlotView.xaml" />
     <None Remove="Views\FluentTableView.xaml" />
     <None Remove="Views\IconBarView.xaml" />
     <None Remove="Views\MenuBarView.xaml" />
@@ -51,8 +52,11 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
     <PackageReference Include="H.NotifyIcon" Version="2.1.0" />
     <PackageReference Include="H.NotifyIcon.WinUI" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.106">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -88,6 +92,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Views\FluentTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Views\IconBarView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -103,7 +112,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\FluentTableView.xaml">
+    <Page Update="Views\FluentPlotView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -8,8 +8,6 @@ namespace FluentTemplate.Interfaces;
 
 public interface IBaseElement
 {
-    public void Draw();
-    public void OnScale();
 
     public void OnHover();
 
