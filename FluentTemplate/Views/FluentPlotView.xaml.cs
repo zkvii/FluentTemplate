@@ -27,6 +27,8 @@ public sealed partial class FluentPlotView
 
     public static float YOffset=0.0f;
 
+    public static float XOffset=0.0f;
+
     public FluentPlotView()
     {
         _viewModel = App.GetService<FluentPlotViewModel>();
@@ -38,17 +40,10 @@ public sealed partial class FluentPlotView
 
     private void InitView()
     {
-        //this ensured ui created init
-        // Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().TryEnqueue(
-        //     Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
-        //     () =>
-        //     {
 
 
 
         _viewModel.InitSwapChain(TableSwapChain, ActualSize);
-        // SizeChanged += FluentTableView_SizeChanged;
-        // SizeChanged += FluentTableView_SizeChanged;
 
 
         TableSwapChain.PointerPressed += TableSwapChain_PointerPressed;
@@ -60,10 +55,8 @@ public sealed partial class FluentPlotView
 
         PointerWheelChanged += FluentTableView_PointerWheelChanged;
 
-        // SwapScrollViewer.PointerWheelChanged += SwapScrollViewer_PointerWheelChanged;
-        // SwapScrollViewer.ViewChanged += SwapScrollViewer_ViewChanged;
 
-        SizeChanged += SwapChainContainer_SizeChanged;
+
         TableSwapChain.CompositionScaleChanged += TableSwapChain_CompositionScaleChanged;
     }
 
@@ -74,48 +67,14 @@ public sealed partial class FluentPlotView
 
     private void UpdateInfinite()
     {
-        var currentBottomPosition = SwapScrollViewer.VerticalOffset + SwapScrollViewer.ViewportHeight;
-        if (Math.Abs(currentBottomPosition - VirtualContainer.ActualSize.Y) != 0) return;
-        if (IsNaN(VirtualContainer.Height))
-            VirtualContainer.Height = VirtualContainer.ActualSize.Y + 100;
-        else
-            VirtualContainer.Height += 100;
+ 
     }
 
 
-    private void SwapScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-    {
-        UpdateInfinite();
-        ZoomFactor=SwapScrollViewer.ZoomFactor;
-        YOffset=(float)SwapScrollViewer.VerticalOffset;
-        Debug.WriteLine($"ZoomFactor:{ZoomFactor}");
-        Debug.WriteLine($"YOffset:{YOffset}");
-    }
 
 
-    private void SwapChainContainer_SizeChanged(object sender, SizeChangedEventArgs e)
-    {
-        Debug.WriteLine($"Scroll size:{SwapScrollViewer.ActualSize}");
-        Debug.WriteLine($"swapchain size{TableSwapChain.ActualSize}");
-        Debug.WriteLine($"virtual size{VirtualContainer.ActualSize}");
 
 
-        if (Math.Abs(ScaleX - 1.0) < 0.1)
-        {
-            TableSwapChain.Width = e.NewSize.Width * TableSwapChain.CompositionScaleX;
-            TableSwapChain.Height = e.NewSize.Height * TableSwapChain.CompositionScaleY;
-        }
-        else
-        {
-            TableSwapChain.Width = e.NewSize.Width / ScaleX;
-            TableSwapChain.Height = e.NewSize.Height / ScaleY;
-        }
-
-        // swapchain resize
-
-        var newSize = new Size((int)TableSwapChain.Width, (int)TableSwapChain.Height);
-        _viewModel.ResizeView(newSize);
-    }
 
     private void TableSwapChain_CompositionScaleChanged(SwapChainPanel sender, object args)
     {

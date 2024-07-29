@@ -159,7 +159,7 @@ public static class DirectXHelper
     public static ID2D1SolidColorBrush CellSelectedBrush;
 
     public static float BorderThick = 2.0f;
-
+    public static ID2D1Effect BlurEffect;
     private static void LoadStaticDrawResources()
     {
         CellGridBrush= D2dContext.CreateSolidColorBrush("#CADABF".ToColor());
@@ -167,5 +167,10 @@ public static class DirectXHelper
         CellBackgroundBrush= D2dContext.CreateSolidColorBrush("#E7E8D8".ToColor());
         CellSelectedBrush= D2dContext.CreateSolidColorBrush("#F9E400".ToColor());
         ColumnRowFillBrush= D2dContext.CreateSolidColorBrush("#5F6F65".ToColor());
+
+
+        var blurEffect = D2dContext.CreateEffect(EffectGuids.GaussianBlur);
+        BlurEffect.NativePointer = blurEffect;
+        BlurEffect.SetValue(GaussianBlurProperties.StandardDeviation,15.0f);
     }
 }
