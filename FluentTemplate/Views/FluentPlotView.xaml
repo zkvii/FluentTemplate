@@ -43,12 +43,12 @@
             <!-- <TextBlock Text="Sample Text" Margin="20" Foreground="Black" FontSize="25"></TextBlock> -->
 
         </SwapChainPanel>
-        <ScrollViewer ZoomMode="Enabled" VerticalScrollBarVisibility="Visible" HorizontalScrollMode="Enabled" x:Name="SwapScrollViewer"
-                     >
-            <StackPanel VerticalAlignment="Stretch" x:Name="VirtualContainer">
-                <views:FluentTableView></views:FluentTableView>
-            </StackPanel>
-        </ScrollViewer>
+        <!-- <ScrollViewer ZoomMode="Enabled" VerticalScrollBarVisibility="Visible" HorizontalScrollMode="Enabled" x:Name="SwapScrollViewer" -->
+        <!--              > -->
+        <!--     <StackPanel VerticalAlignment="Stretch" x:Name="VirtualContainer"> -->
+        <!--         <views:FluentTableView></views:FluentTableView> -->
+        <!--     </StackPanel> -->
+        <!-- </ScrollViewer> -->
     </Grid>
 
 </UserControl>

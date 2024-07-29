@@ -60,8 +60,8 @@ public sealed partial class FluentPlotView
 
         PointerWheelChanged += FluentTableView_PointerWheelChanged;
 
-        SwapScrollViewer.PointerWheelChanged += SwapScrollViewer_PointerWheelChanged;
-        SwapScrollViewer.ViewChanged += SwapScrollViewer_ViewChanged;
+        // SwapScrollViewer.PointerWheelChanged += SwapScrollViewer_PointerWheelChanged;
+        // SwapScrollViewer.ViewChanged += SwapScrollViewer_ViewChanged;
 
         SizeChanged += SwapChainContainer_SizeChanged;
         TableSwapChain.CompositionScaleChanged += TableSwapChain_CompositionScaleChanged;
